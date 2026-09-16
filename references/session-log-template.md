@@ -94,6 +94,19 @@ When user requests documentation, ask which tool to document for, determine log 
 
 ---
 
+## Honest Self-Assessment
+
+**Required — never skip this section.**
+
+What didn't work, what's untested, what's parked, and anything either party may be pattern-matching
+ahead of the evidence. 2-4 honest bullets or a short paragraph. The purpose is to stop future-you
+reading this log and assuming everything was settled when it wasn't.
+
+If the session genuinely had no caveats, write "No significant caveats — everything tested was
+validated by results" rather than deleting the heading.
+
+---
+
 ## Next Steps
 
 - [ ] [Next task]
@@ -106,12 +119,27 @@ When user requests documentation, ask which tool to document for, determine log 
 
 ---
 
+## Session Insight
+
+**Required — always the final section. One sentence, not a list, not a paragraph.**
+
+What changed about how the user works, or what design principle the session surfaced. The
+one-sentence limit is the design: it forces a *meta* observation instead of a recap. If it can't be
+condensed to one sentence, the insight isn't ready yet.
+
+---
+
 *Session ended: [Brief summary]*
 ```
 
 ---
 
 ## Session Log Best Practices
+
+**Read this file, not a previous log.** A finished session log is an *example*; this file is the
+*spec*. Working out the shape by opening the last log silently drops whatever sections that log
+happened to omit — which is exactly how the Honest Self-Assessment and Session Insight sections went
+missing from logs on 2026-08-22 and 2026-09-07.
 
 **Keep it concise:** When knowledge logs exist, use brief summaries with "see notes:" references instead of duplicating content.
 

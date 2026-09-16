@@ -28,7 +28,7 @@ A comprehensive project session companion that helps you:
 | `date "+%Y-%m-%d %H%M"` | Get current timestamp for file naming |
 | `mkdir -p session-logs` | Create session logs folder |
 | `mkdir -p resources/[tool]-knowledge-logs` | Create knowledge log folder for specific tool |
-| `cp -r session-log-companion-v1 ~/.cursor/skills/session-log-companion-v1` | Update the skill after editing |
+| `cp -r session-log-companion ~/.cursor/skills/session-log-companion` | Update the skill after editing |
 
 **Trigger phrases:**
 - "Start a session for [project]" → Begin session
@@ -45,7 +45,7 @@ A comprehensive project session companion that helps you:
 Full step-by-step instructions are in **INSTALL.md** (copy & paste method first, terminal option for a faster install).
 
 **Summary:**
-- **Copy & paste:** Copy `session-log-companion-v1` into `~/.cursor/skills/`, restart Cursor.
+- **Copy & paste:** Copy `session-log-companion` into `~/.cursor/skills/`, restart Cursor.
 - **Terminal:** See "Quick Install Using Terminal" in INSTALL.md.
 - **Test first:** Keep the folder in your workspace and reference it manually; when ready, follow INSTALL.md to install globally.
 

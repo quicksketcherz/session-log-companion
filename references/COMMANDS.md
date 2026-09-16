@@ -40,7 +40,7 @@ Common commands you'll use with this skill:
 | `date "+%Y-%m-%d %H%M"` | Get current timestamp | For manual file naming |
 | `mkdir -p session-logs` | Create session logs folder | If you want to set up folders manually |
 | `mkdir -p resources/[tool]-knowledge-logs` | Create knowledge log folder | Replace `[tool]` with your tool name (e.g., `touchdesigner-knowledge-logs`) |
-| `cp -r session-log-companion-v1 ~/.cursor/skills/session-log-companion-v1` | Update the skill | After editing the skill folder, copy to Cursor skills folder |
+| `cp -r session-log-companion ~/.cursor/skills/session-log-companion` | Update the skill | After editing the skill folder, copy to Cursor skills folder |
 | `ls -la ~/.cursor/skills/` | Check installed skills | Verify the skill is installed |
 | `ls -la session-logs/` | List session logs | See all session logs with timestamps |
 | `ls -la resources/[tool]-knowledge-logs/` | List knowledge logs | See all knowledge logs for a specific tool |

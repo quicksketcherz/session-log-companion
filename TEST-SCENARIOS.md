@@ -207,7 +207,7 @@
 
 To test this skill manually:
 
-1. [ ] Copy skill to `~/.cursor/skills/session-log-companion-v1/` — see INSTALL.md for steps
+1. [ ] Copy skill to `~/.cursor/skills/session-log-companion/` — see INSTALL.md for steps
 2. [ ] Restart Cursor or reload window
 3. [ ] Test each scenario above
 4. [ ] Verify folder creation works
