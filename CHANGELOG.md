@@ -22,6 +22,7 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 
 ## ⚠️ Pending upload to claude.ai
 
+- [2026-10-03] Committed and pushed to GitHub as `3abcb5f` (first push since 2026-09-15).
 - [2026-10-03] **Pre-flight now enforced in Claude Code** by `scripts/preflight_gate.py`, a PreToolUse hook on Write in `~/.claude/settings.json`. It blocks creating a new session log until a PRE-FLIGHT line is in chat since the last log. Tested live: blocked without the line, allowed with it. `setup-new-computer.command` adds the hook on a new Mac. claude.ai has no hooks, so it is prose-only there.
 - [2026-10-03] **Removed `master-template.md`, `how-to-use-session-log-companion.md` and `references/COMMANDS.md`**, plus both "add this to COMMANDS.md?" steps (Workflow 4 Step 7 gone, Step 8 → 7). The 4 real commands from COMMANDS.md: the Illustrator two were already in LC `references/commands.md`, `mdls` already in TSC `gotchas/render-and-output.md`, and `scriptErrors(recurse=True)` moved into TSC `references/debugging-checklist.md` §6. README / INSTALL / knowledge-log templates no longer point at them.
 - [2026-10-03] **AI Rules Logs removed** — the section, the old Step 6, the post-session check and the example. Steps 7–9 became 6–8.

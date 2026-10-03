@@ -13,7 +13,6 @@ The inbox for fixing and improving this skill. Bugs and ideas land here while Jo
 ## Tighten and modernise
 _Moved from `daily-notes/2026-09-17-1910-things-to-do-tighten-and-modernise-slc-claude-skills.md`, which has the full detail for each item._
 
-- [ ] [2026-09-17] Commit the repo and push to GitHub (last commit 041854e, 2026-09-15; SKILL.md + CHANGELOG uncommitted). This also closes the 2026-08-26 "then a version on GitHub" item, moved from `daily-notes/2026-08-26-1357-things-to-do-slc-save-screenshots-then-github-claude-skills.md`
 - [ ] [2026-09-17] Then package and re-upload to claude.ai: `resources/skills-JB/package-skill.sh session-log-companion`
 - [ ] [2026-09-17] While there, package and upload DNC too
 
