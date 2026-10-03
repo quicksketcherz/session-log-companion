@@ -292,11 +292,9 @@ For issues or questions:
 ├── TEST-SCENARIOS.md           # Test cases (10 scenarios)
 ├── INSTALL.md                  # This file
 └── references/
-    ├── COMMANDS.md                  # Command reference (customizable!)
     ├── discovery-log-template.md    # Discovery log structure
     ├── learning-log-template.md     # Learning log structure
-    ├── session-log-template.md      # Session log structure
-    └── master-template.md           # Complete system guide
+    └── session-log-template.md      # Session log structure
 ```
 
 Total size: ~85KB

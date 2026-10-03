@@ -116,7 +116,6 @@
 **Commands that helped learn this:**
 - `[command]` - [What it did / How it helped understanding]
 
-**see commands:** `references/COMMANDS.md` for full command reference
 
 ---
 

@@ -19,7 +19,6 @@ A comprehensive project session companion that helps you:
 
 ## Quick Reference - Commands
 
-**Full command reference:** See `references/COMMANDS.md` for complete list of commands, trigger phrases, and customization guide.
 
 **Common commands:**
 
@@ -36,7 +35,6 @@ A comprehensive project session companion that helps you:
 - "I prefer [style]" → Teach preference
 - "Summarize this session" → End session
 
-**Customization:** You can add your own commands and trigger phrases to `references/COMMANDS.md`. The agent will suggest adding useful commands as you work.
 
 ---
 
@@ -142,11 +140,9 @@ All logs use the same timestamp format for easy cross-referencing:
 
 The skill includes these reference templates:
 
-- `references/COMMANDS.md` - Command reference (customizable!)
 - `references/discovery-log-template.md` - For problem-solving moments
 - `references/learning-log-template.md` - For understanding concepts
 - `references/session-log-template.md` - For session summaries
-- `references/master-template.md` - Complete documentation system
 
 ## Tips for Best Results
 
@@ -180,9 +176,7 @@ The skill includes these reference templates:
 - Smart log type detection
 - Platform-agnostic preference system
 - Cursor rules integration
-- COMMANDS.md reference file (customizable)
 - Command tracking across all log types
-- Agent prompts to update COMMANDS.md as you work
 
 ## Future Enhancements
 

@@ -1,11 +1,11 @@
 ---
 name: session-log-companion
-description: Comprehensive project session companion for documenting work sessions, creating knowledge logs when discovering or learning something, teaching agent preferences, and improving collaboration. Use when user says "start a session", "create session log", "summarize this session", "document this discovery", "create a knowledge log", "I want to improve how you work with me", "remember this preference", "let's continue", "continue from last session", "pick up where we left off", "what should I work on next", or any session/documentation-related request. Also trigger when user says "log this tangent", "log this branch", "make a tangent log", "make a branch log", "spinoff log", or "branched session log", or when one chat covered two projects belonging in two different folders — see Workflow 4b's four-test bar before suggesting a split. Also trigger when user mentions being stuck, hitting an impasse, needing to understand concepts, or wanting to capture learnings.
+description: Project session companion for documenting work sessions, creating knowledge logs when discovering or learning something, and saving preferences to CLAUDE.md. Use when user says "start a session", "create session log", "do slc", "lets do slc", "do sl", "do a session log", "summarize this session", "document this discovery", "create a knowledge log", "I want to improve how you work with me", "remember this preference", "let's continue", "continue from last session", "pick up where we left off", "what should I work on next", or any session/documentation-related request. Also trigger when user says "log this tangent", "log this branch", "make a tangent log", "make a branch log", "spinoff log", or "branched session log", or when one chat covered two projects belonging in two different folders — see Workflow 4b's four-test bar before suggesting a split. Also trigger when user mentions being stuck, hitting an impasse, needing to understand concepts, or wanting to capture learnings.
 ---
 
 # Session Log Companion (SLC)
 
-A comprehensive companion for project sessions that helps you document your work, capture discoveries and learnings, teach the agent your preferences, and build a knowledge base that improves collaboration over time.
+A comprehensive companion for project sessions that helps you document your work, capture discoveries and learnings, and build a knowledge base that improves collaboration over time.
 
 **Abbreviation:** SLC - Use this when referencing this skill in documentation or conversation.
 
@@ -16,7 +16,7 @@ This skill triggers for four main scenarios:
 1. **Starting a session** - "start a session", "begin session log", "let's work on X"
 2. **Continuing a session** - "let's continue", "continue from last session", "pick up where we left off", "what should I work on next"
 3. **Creating knowledge logs** - "document this", "create a knowledge log", "I'm stuck", "can you explain how X works"
-4. **Teaching preferences** - "I want to improve how you work with me", "remember this preference", "I prefer X style"
+4. **Saving preferences** - "I want to improve how you work with me", "remember this preference", "I prefer X style" → `CLAUDE.md` (Workflow 3)
 5. **Ending a session** - "summarize this session", "create session log", "wrap up"
 
 ## Enforcement Rule
@@ -26,7 +26,7 @@ This skill triggers for four main scenarios:
 Key checkpoints:
 - **Continue session** → Always ask intention first, then time available, before scanning session logs (Steps 1-2 of Workflow 1b)
 - **Knowledge logs** → Always ask "Which tool should I document this for?" before creating (Step 3 of Workflow 2)
-- **Preference logs** → Always offer Cursor rules integration after creating (Step 3 of Workflow 3)
+- **Preferences** → Save to `CLAUDE.md` (Workflow 3). Never write a preference log
 - **Session logs** → Always check for undocumented items before finalizing (Step 2 of Workflow 4)
 - **Any log** → Always extract the chat's screenshots from the session jsonl BEFORE writing anything (Step 0 of Workflow 4) — do it, never ask
 - **Session logs** → **READ `references/session-log-template.md` BEFORE writing a single line.** Never work out the shape by opening a previous session log. See the pre-flight below — it is not optional.
@@ -36,8 +36,12 @@ Key checkpoints:
 Immediately before writing a session log, output this line so the check is visible rather than remembered:
 
 ```
-PRE-FLIGHT — template: read (N sections) · knowledge logs: asked/none · screenshots: extracted/owned-by-DNC
+PRE-FLIGHT — template: read (N sections) · knowledge logs: asked/none · screenshots: extracted/owned-by-DNC · notes: N caught / N placed
 ```
+
+`notes` counts the `note.` / `fleet` lines from `list_captures.py` (Workflow 4, Step 2). `0 caught / 0 placed` is a fine answer. Leaving the field out is not.
+
+**In Claude Code a hook enforces this.** `scripts/preflight_gate.py` runs before every Write. If the Write creates a new `.md` in a `session-logs/` folder and no PRE-FLIGHT line has been printed in chat since the last session log, it blocks the Write and says why. Print the line, then write again. Edits to an existing log are not checked. The hook lives in `~/.claude/settings.json`, and `resources/my-claude-preferences/setup-new-computer.command` adds it on a new Mac. Why (2026-10-03): the line was printed after the log on 08-22, 09-07 and 09-17, and words alone never fixed it. On claude.ai there is no hook, so the line still relies on this section.
 
 If any field cannot honestly be filled, **stop and go do that step.** The line is the point: a step you have to report on is a step you notice skipping, and a step you merely intend to take is one you will not.
 
@@ -96,7 +100,16 @@ This scopes what's realistic. A 10-minute session is different from an hour — 
 
 #### Step 3: Scan Recent Session Logs
 
-Read the last 5 session logs in `session-logs/` (sorted by filename, most recent first). Extract the **Next Steps** section from each.
+Read the last 5 session logs, newest first by filename. Look in the project's own `session-logs/` **and** in every `session-logs/` one folder down (a project like TD-SKETCHES26 keeps one per sketch: `ghost/`, `spider-web/`, `candle-flame/`). Pool them, then take the newest 5:
+
+```bash
+find session-logs */session-logs -maxdepth 1 -name "20[0-9][0-9]-*" 2>/dev/null \
+  | awk -F/ '{print $NF "\t" $0}' | sort -r | head -5 | cut -f2
+```
+
+From each, take two sections: **Decisions in force** and **Next Steps**. Show the decisions first. They are the rules still holding, and the next steps only make sense inside them. Older logs have no Decisions section; skip it there.
+
+When Next Steps is a link to a `daily-notes/…-things-to-do-…` note, read that note and show only its unticked items. If the link no longer resolves because the note was archived into `daily-notes/zz-archives/`, it's done. Skip it.
 
 **If user stated a clear intention** → Match their intention against the collected Next Steps. Surface any relevant items and note which session they came from. This helps the user see connections they might have forgotten ("Oh right, that's related to what I was doing last week").
 
@@ -223,17 +236,6 @@ Create the folder if it doesn't exist.
 5. Include any commands used in the "Commands Used" section
 6. Save to: `resources/[tool]-knowledge-logs/YYYY-MM-DD-HHMM-Brief-Title.md` — or, if Step 0 pulled out screenshots, to `resources/[tool]-knowledge-logs/YYYY-MM-DD-HHMM-Brief-Title/` with the `.md` and `attachments/` inside
 
-#### Step 5: Offer to Update COMMANDS.md
-
-After creating the knowledge log, if commands were used:
-
-Ask: "Would you like me to add any of these commands to `references/COMMANDS.md` for future reference?"
-
-If yes:
-1. Read `references/COMMANDS.md`
-2. Add the command(s) to the "Custom Commands" table
-3. Include context about when/why to use them
-
 **Example interaction:**
 
 User: "I'm stuck with this camera CHOP chain - it's not driving the camera. Document this."
@@ -244,124 +246,20 @@ User: "Yes"
 
 Agent: *Creates discovery log at `resources/touchdesigner-knowledge-logs/2026-03-07-1430-Camera-CHOP-Chain-Not-Driving-Camera.md`*
 
-Agent: "I noticed you used `touchdesigner -debug` to solve this. Want to add it to COMMANDS.md?"
-
 ---
 
-### Workflow 3: Teaching Agent Preferences
+### Workflow 3: Preferences go to CLAUDE.md, not a log
 
-When the user wants to teach you their preferences or improve collaboration:
+SLC no longer writes preference logs. When Johno says "remember this", "remember this preference", "make this a pref", or "I want to improve how you work with me", save it where his agents actually read it:
 
-#### Step 1: Identify the Preference
+- **About how he works with any agent, across his work** → his global `CLAUDE.md`: `resources/my-claude-preferences/CLAUDE.md` (`~/.claude/CLAUDE.md` links to it).
+- **About one project only** → that project's memory.
+- **About how one skill works** → that skill's `IMPROVEMENTS.md`.
+- **About how he writes daily notes** (tags, types, habits) → DNC's `references/learned-patterns*.md`.
 
-Listen for preferences about:
-- **Communication style:** Technical depth, formality, verbosity
-- **Documentation patterns:** How detailed, what structure
-- **Code commenting:** When and how to comment
-- **Explanation style:** Analogies vs theory, examples vs concepts
-- **Workflow patterns:** How they like to work, what to assume
+Say in one line where it went. The global `CLAUDE.md` has the same rule under *Where my preferences get saved*. That file wins if the two ever differ.
 
-#### Step 2: Create Preference Log
-
-1. Generate timestamp: `date "+%Y-%m-%d %H%M"`
-2. Create folder if needed: `resources/agent-companion-preference-logs/`
-3. Document the preference with:
-   - What the preference is
-   - Why it matters to the user
-   - Examples of good vs bad
-   - When to apply it
-4. Save to: `resources/agent-companion-preference-logs/YYYY-MM-DD-HHMM-Preference-Title.md`
-
-**Template for preference logs:**
-
-```markdown
-# [Preference Title]
-
-**Date:** YYYY-MM-DD  
-**Time:** HHMM  
-**Category:** [Communication/Documentation/Code/Explanation/Workflow]  
-**Type:** Agent Preference
-
----
-
-## The Preference
-
-**What:** [Clear statement of the preference]
-
-**Why:** [Why this matters to the user]
-
----
-
-## Good Examples
-
-**Example 1:**
-[What this looks like when done right]
-
-**Example 2:**
-[Another good example]
-
----
-
-## Avoid
-
-**Example 1:**
-[What NOT to do]
-
-**Why it's wrong:** [Explanation]
-
----
-
-## When to Apply
-
-[Contexts where this preference matters]
-
----
-
-## Notes
-
-[Any additional context or exceptions]
-
----
-
-## Commands (if applicable)
-
-**If this preference involves commands, list them here:**
-- `[command]` - [When/how to use it]
-
-**see commands:** `references/COMMANDS.md` for full command reference
-```
-
-#### Step 3: Check for Command Preferences
-
-If the preference involves commands or workflows:
-
-Ask: "Should I add this command to `references/COMMANDS.md` for easy reference?"
-
-If yes:
-1. Read `references/COMMANDS.md`
-2. Add the command to the "Custom Commands" table
-3. Note the preference in the command's "Notes" column
-
-#### Step 4: Offer Cursor Rules Integration
-
-If the user is in Cursor, ask:
-
-"Would you like me to also add this to `.cursor/rules/` so it's automatically enforced in Cursor?"
-
-If yes:
-1. Create or update `.cursor/rules/preferences.md`
-2. Add a rule that references the preference log
-3. Format: "See `resources/agent-companion-preference-logs/[filename]` for details"
-
-**Example interaction:**
-
-User: "I prefer more technical explanations with less hand-holding. Don't explain basic concepts unless I ask."
-
-Agent: "Got it. I'll document this preference. This is about communication style - you want me to assume technical knowledge and skip basics unless requested."
-
-*Creates preference log*
-
-Agent: "Would you like me to also add this to `.cursor/rules/` so it's automatically enforced in Cursor?"
+Why (2026-10-03): in five months only one preference log was written (`areas/how to learn and teach about storyboarding scenes/resources/agent-companion-preference-logs/`, 2026-05-31). It was a talking-style rule, and "How to talk to me" in `CLAUDE.md` now covers it. Nothing read those logs. The Cursor step that went with them is gone too.
 
 ---
 
@@ -374,6 +272,8 @@ When the user wants to wrap up and create a session log:
 **Before deciding anything else.** This is step zero, not an afterthought. Any screenshot the user posted in this chat gets pulled out, visually verified against the project, and saved into the log's `attachments/` folder — which makes that log a **folder-log** (see *Attachments & log folders*). Applies to **every log type** — session logs, knowledge logs, branched logs — not just the ones that feel visual. Never ask permission ("want me to attach it?" is wrong — just do it). Never skip it because the image's content was already transcribed into the body. An older log with no attachments is a bug, **never** a precedent to copy.
 
 **How:** find the most recently modified jsonl at `~/.claude/projects/<project-slug>/<session-uuid>.jsonl` and extract every uploaded image. **Visually verify each image belongs to this project and prune strays** — `@`-referencing another note folder during the chat embeds that folder's images into the jsonl, so the extractor picks those up too.
+
+**Scan the jsonl again just before saving.** Johno often posts one more screenshot while the log is being written, or after the ask in Step 3. Run the extractor a second time right before the save, and add anything new. Why (2026-09-30, td-project-templates-JB): the last screenshot came in after Step 0 had run and had to be copied by hand.
 
 **The one thing that can stop this step:** DNC owns the images for this work block. See *Who owns the screenshots: DNC or SLC* — check that first, and if DNC owns them, link to them instead of copying. Nothing else stops this step.
 
@@ -404,6 +304,14 @@ When the user wants to wrap up and create a session log:
 
 **If found:** These become **separate knowledge log files**, referenced in the session log with "see notes:" — NOT included inline in the session log.
 
+**Also catch every `note.` and `fleet` line.** Johno starts a message with `note.` or `fleet` to catch a thought mid-session. Don't trust your memory of the chat for these. Run DNC's script, which reads them from the jsonl:
+
+```bash
+python3 ~/.claude/skills/daily-notes-companion/scripts/list_captures.py
+```
+
+Each one lands somewhere: a knowledge log, a skill's `IMPROVEMENTS.md`, memory, a things-to-do note, or the session log itself. The session log gets a short **Notes captured** section listing each one and where it went. Count them for the PRE-FLIGHT line (`notes: N caught / N placed`). If the two numbers differ, place the rest before writing. Why (2026-09-30, TD-HALLOWEEN26): this list didn't include `note.` or `fleet`, so those captures were missed in session logs.
+
 #### Step 3: Session Assessment
 
 **Ask yourself these questions before creating the session log:**
@@ -413,10 +321,18 @@ When the user wants to wrap up and create a session log:
 3. **Did user learn foundational concepts?** (understanding principles, "why" explanations) → Likely needs Learning Log
 4. **Is this knowledge reusable?** (Would user benefit from reference material?) → Suggest knowledge log
 
-**If any are YES, ask user BEFORE creating session log:**
-"This session covered [topic] for [tool]. Should I create a knowledge log in `[tool]-knowledge-logs/`? It would be useful as reference material for [specific benefit]."
+**If any are YES, ask BEFORE creating the session log. Keep the ask short.** It has exactly this shape, nothing more:
 
-Wait for confirmation before proceeding.
+1. One line saying what the knowledge log would cover.
+2. **One ❓ line with your pick in it**: the folder you think it belongs in and why, in a few words, e.g. "so the gotchas pick it up". Offer the other choice in the same line.
+3. **One 🟢 line saying where the session log will go.**
+
+```
+❓ Is that knowledge log for TouchDesigner, saved in `touchdesigner-knowledge-logs/` where the gotchas pick it up? That's my pick. Or should it go in the template folder?
+🟢 The session log itself will go in `td-project-templates-JB/session-logs/`.
+```
+
+No list of options, no explaining what a knowledge log is. Wait for his answer, then go on. Why (2026-09-30, td-project-templates-JB): Johno liked this shape: *"saves tokens … best suggesting where to save"*.
 
 #### Step 4: Generate Session Log
 
@@ -424,24 +340,39 @@ Wait for confirmation before proceeding.
 2. **Emit the PRE-FLIGHT line** (see Enforcement Rule). The template was read back in Step 1 — if it was not, stop and read it now; do not proceed from memory or from a previous log.
 3. Fill in all sections based on session review
 4. Use "see notes:" pattern to reference any knowledge logs created
-5. Include "AI Rules to Create Later" or "Guides to Update Later" sections if applicable
+5. Include a "Guides to Update Later" section if applicable
 6. **Always include an "Honest Self-Assessment" section** — see required sections below
 7. **Always end with a "Session Insight" section** — see required sections below
 8. Save to: `session-logs/YYYY-MM-DD-HHMM-Session-Title.md` — or, if Step 0 pulled out screenshots, to `session-logs/YYYY-MM-DD-HHMM-Session-Title/` with the `.md` and `attachments/` inside (see *Attachments & log folders*)
 
+**Name the log after the worksession title, when there is one.** Before writing, look back through this chat for a worksession title DNC gave. It sits alone in a fence, in this shape: `YYYY-MM-DD-HHMM-worksession-short-description-TERM`. Johno gets one when he asks "give me a title for this session". If there is one:
+- Use that exact string as the filename (`<title>.md`, or `<title>/` for a log folder) **and** as the heading (`# Session: <title>`). Don't make up a Title-Case name, and don't rename later.
+- Add one row to **Files Created/Modified**: `` `<title>` `` | — | worksession title. Nothing more in the row.
+- This way the session log and the daily note share one name, so either one finds the other.
+
+**When Johno asks for SL and DN in one message** ("lets do a sl and dn", "sl and dn"): write the session log **first**, then run DNC to file. Then come back to the log and fill in two links:
+- **see notes:** the daily note for this block — `daily-notes/<worksession note>`.
+- **Next Steps:** one line pointing at the things-to-do note DNC just filed, instead of the items themselves. Example: `→ daily-notes/2026-10-03-1542-things-to-do-cloud-base-and-comp-clouds-next-TD-SKETCHES26.md`. That note is the only live list. Ticks happen there, so a second copy here would go stale.
+
+When SL runs without DN, Next Steps stays a normal list. Why (2026-10-03): in the 10-03 clouds block the same 5 next steps sat in both files, and only the daily note copy ever got ticked. Session logs linked back to their daily note only about half the time.
+
+If there is no worksession title, name it `YYYY-MM-DD-HHMM-Session-Title` as usual. Why (2026-10-01, TD-SKETCHES26): a log was first written as `…-Spider-Web-Moonlight-Look-And-Character-Base.md` and then had to be renamed, with 4 links fixed.
+
 **Required sections (always include):**
 
 - **Honest Self-Assessment** — placed after testing/accomplishments and before "Carry Forward to Next Session." Names what didn't work, what's untested, what's parked, and what the agent or user might be pattern-matching ahead of evidence. The point is to prevent future-self from reading the log and assuming everything was settled when it wasn't. Keep it short — 2–4 honest bullet points or a short paragraph. If the session genuinely had no caveats worth flagging, write "No significant caveats — everything tested was validated by results" rather than skipping the section.
+
+- **Decisions in force** — placed just above Next Steps. The rules settled in this session or earlier that still apply next time, such as "4 × 33-min sessions", "720 × 1280", or "the build moves to `candle-flame/`". One line each, short. Next Steps says what to do. This says what not to re-argue. Workflow 1b reads it. If nothing was decided, write "None new" rather than skipping it. Why (2026-10-02, TD-SKETCHES26): the plan for the month was in one log, but the next chat only picked up the to-do list and lost the rules.
 
 - **Session Insight** — the final section of every session log. One sentence (not a list, not a paragraph) on what changed about how the user works, or what design principle the session surfaced. The constraint of "one sentence" is the design — it forces a *meta* observation rather than a recap. If you can't condense it to one sentence, the insight isn't ready yet.
 
 **Key principles for session logs:**
 - Keep it concise - use "see notes:" to reference detailed documentation
 - Cross-reference knowledge logs by timestamp
-- Only list project files in "Files Created/Modified" (not the logs themselves)
+- Only list project files in "Files Created/Modified" (not the logs themselves). The one exception is the worksession title row (see Step 4)
 - Capture the "why" behind decisions, not just the "what"
 - Capture the texture of the session, not just the outputs — the *how* of the work is what makes logs worth re-reading later
-- Leave "USER_FILL_WHAT_AI_MODEL_NAME_WAS_USED" as-is (the agent cannot detect the model name in Cursor; the user will fill it in manually from their model selector)
+- Fill in **AI Assistant** with the model you are running as. Claude Code names it in the system prompt. Never leave a placeholder for Johno to fill
 
 **Note on template file:** If `references/session-log-template.md` exists in the project, it should also be updated to include the Honest Self-Assessment and Session Insight sections so the template and this SKILL.md stay aligned.
 
@@ -460,18 +391,7 @@ If the project maintains reference documentation (setup guides, quick reference,
 
 **If YES:** Update the guide with corrections. Document what was wrong vs what actually works. Add to the "Guides Updated" section of the session log.
 
-#### Step 6: Check for AI Rules Log Need
-
-**Did this session involve improving the documentation system or updating AI rules?**
-
-- Updated or created **Cursor rules** (`.cursor/rules/`) or **rules/instructions on another platform** → **Always create an AI rules log** (don't ask, don't skip)
-- Corrected AI behavior about session/knowledge log workflow → Create AI rules log
-- Updated/created README instructions → Ask if AI rules log is needed
-- Clarified ambiguous phrasing in documentation system → Ask if AI rules log is needed
-
-**When creating:** Save to `ai_rules_logs/YYYY-MM-DD-HHMM-Brief-Description.md` using the template in `ai_rules_logs/README.md`, and reference in session log with "see notes:".
-
-#### Step 7: Post-Session Log Workflow
+#### Step 6: Post-Session Log Workflow
 
 **⚠️ CRITICAL: After the session log is created, immediately check for undocumented items and offer to create them.**
 
@@ -479,41 +399,23 @@ This workflow prevents breaking the user's flow during discovery while ensuring 
 
 **Check these sections of the session log:**
 
-1. **"AI Rules to Create Later" section** — If any rules are listed with "📝 To document" status:
-   - Say: "I noticed we have [N] AI rules to document. Want me to create those AI rules logs now?"
-   - If yes, create each AI rule log in `ai_rules_logs/` folder using same timestamp
-   - Update session log's section to show ✅ status
-
-2. **"Knowledge Logs Created" section** — If discoveries/learnings happened but no logs were created:
+1. **"Knowledge Logs Created" section** — If discoveries/learnings happened but no logs were created:
    - Say: "I noticed we discovered [X]. Should I create a knowledge log for this?"
    - If yes, create appropriate knowledge log in `resources/[tool]-knowledge-logs/`
    - Update session log to include the new knowledge log
 
-3. **"Guides to Update Later" section** — If guide corrections are listed:
+2. **"Guides to Update Later" section** — If guide corrections are listed:
    - Say: "Should I update the guides now with the corrections we found?"
    - If yes, apply corrections to guides
    - If no, note for next session
 
 **Why this matters:** Doesn't interrupt flow during active discovery/implementation. Converts "to do later" items into actual documentation. User can choose to defer if in a hurry.
 
-#### Step 8: Offer to Update COMMANDS.md
-
-After creating the session log, if useful commands were used:
-
-Ask: "Would you like me to add any of the commands from this session to `references/COMMANDS.md`?"
-
-If yes:
-1. Read `references/COMMANDS.md`
-2. Add the command(s) to the "Custom Commands" table
-3. Include context about the session where they were useful
-
-#### Step 9: Confirm Completion
+#### Step 7: Confirm Completion
 
 Summarize what was documented:
 - Session log location
 - Knowledge logs created (with links)
-- Preference logs created (if any)
-- AI rules logs created (if any)
 - Guides updated (if any)
 
 #### Post-Session Knowledge Log Creation
@@ -536,16 +438,9 @@ User: "Yes"
 
 Agent: *Creates knowledge log, then session log with "see notes:" cross-reference*
 
-Agent: *Checks post-session items:* "I noticed we have 2 AI rules to document from this session. Want me to create those now?"
-
-User: "Yes"
-
-Agent: *Creates AI rules logs, updates session log*
-
 Agent: "Session documented! Created:
 - Session log: `session-logs/2026-03-07-1430-TouchDesigner-Particle-System-Build.md`
-- Knowledge log: `resources/touchdesigner-knowledge-logs/2026-03-07-1430-Camera-CHOP-Chain-Fix.md`
-- AI rules log: `ai_rules_logs/2026-03-07-1430-Session-Log-Timing-Rule.md`"
+- Knowledge log: `resources/touchdesigner-knowledge-logs/2026-03-07-1430-Camera-CHOP-Chain-Fix.md`"
 
 ---
 
@@ -633,38 +528,6 @@ Agent: "Branch starts at 0500 when we shifted from COA2026 editing to DNC skill 
 
 ---
 
-## AI Rules Logs
-
-**Purpose:** Track how AI assistants learn to work with your documentation system. Capture improvements and corrections so they're portable across projects and platforms.
-
-**Folder:** `ai_rules_logs/` at project level (visible, not hidden — matches `session-logs/` pattern)
-
-**File format:** `YYYY-MM-DD-HHMM-Brief-Description.md`
-
-**Create when:**
-- Updated or created Cursor rules (`.cursor/rules/`) → always create (don't skip)
-- Updated rules/instructions on another platform (Claude Projects, ChatGPT, Gemini) → always create
-- Corrected AI behavior about documentation workflows
-- Updated/created README instructions (session_logs, knowledge logs, etc.)
-- Clarified ambiguous phrasing in documentation system
-
-**Don't create when:**
-- One-time correction specific to current project task
-- Session was about project work only (no documentation system changes)
-- AI made a simple mistake that won't repeat
-
-**Workflow:** When creating a session log after discussing rule improvements, create the AI rules log in `ai_rules_logs/` and reference in session log with "see notes:". If Cursor rules or rules on any other AI platform were updated, always create an AI rules log. For README-only or phrasing changes, ask the user first.
-
-**Template:** Read `ai_rules_logs/README.md` in the project for the full template.
-
----
-
-## Use with Any AI or Platform
-
-These instructions apply whether using Cursor, Claude, Gemini, ChatGPT, or another AI. The core workflow is the same: review the session for notes to add, run the checklist (document later → knowledge logs, update project docs if applicable, AI rules log if rules/instructions were updated). If your platform uses a different place for rules (e.g. not `.cursor/rules/`), treat updates there the same way — create an AI rules log and reference it in the session log with "see notes:".
-
----
-
 ## Smart Defaults
 
 To make the workflows smooth, use these smart defaults:
@@ -678,15 +541,13 @@ To make the workflows smooth, use these smart defaults:
 - Suggest tool based on file extensions (.toe = TouchDesigner, .aep = After Effects, etc.)
 
 **Pre-fill known info:**
-- AI model: Leave as `WHAT_AI_MODEL_USED?` (agent cannot detect model in Cursor; user fills in manually)
-- AI platform: Cursor (or current platform)
+- AI model: fill it in yourself. In Claude Code, the system prompt names the model (e.g. Opus 5.5). Never leave a placeholder
+- AI platform: Claude Code, or claude.ai
 - Date: Current date
 
 **Folder creation:**
 - Create `session-logs/` if it doesn't exist
 - Create `resources/[tool]-knowledge-logs/` as needed
-- Create `resources/agent-companion-preference-logs/` as needed
-- Create `ai_rules_logs/` as needed
 
 ---
 
@@ -748,27 +609,6 @@ Use timestamp-based cross-referencing to link related documentation:
 
 ---
 
-## Platform Awareness
-
-### Cursor-Specific Features
-
-When the user is in Cursor:
-- Offer to create `.cursor/rules/` files for preferences
-- Reference `.cursor/rules/` in examples
-- Explain that rules persist across all Cursor sessions
-
-### Platform-Agnostic Core
-
-The core system works everywhere:
-- Preference logs are portable (work with Claude.ai, ChatGPT, Gemini, etc.)
-- Session logs and knowledge logs are just markdown files
-- Other platforms have similar systems:
-  - **Claude.ai:** Project instructions
-  - **ChatGPT:** Custom instructions
-  - **Windsurf/Cline:** Similar to Cursor
-
----
-
 ## Reference Files
 
 This skill bundles several reference files for detailed templates:
@@ -776,11 +616,24 @@ This skill bundles several reference files for detailed templates:
 - `references/discovery-log-template.md` - Full Discovery Log structure
 - `references/learning-log-template.md` - Full Learning Log structure
 - `references/session-log-template.md` - Full Session Log structure
-- `references/master-template.md` - Complete documentation system guide
 
 Read these files when you need the full template structure or additional guidance.
 
 ---
+
+## Works with the other skills
+
+DNC, SLC, TSC and LC often run in the same session. Each keeps to its own job:
+
+- **DNC** (daily-notes-companion) — logs start times, shows open things-to-do, files the day's notes. The only one that records time.
+- **SLC** (session-log-companion) — writes the session log and knowledge logs at the end.
+- **TSC** (touchdesigner-scaffolding-companion) — builds in TouchDesigner.
+- **LC** (layout-companion) — lays out compositions in After Effects, Illustrator, Figma and client decks.
+- **Review Companion** — tallies the hours DNC logged.
+
+## Improving this skill — `IMPROVEMENTS.md`
+
+When something about **how SLC works** goes wrong or could be better, add one line to `IMPROVEMENTS.md` at the skill root, in the format written there. Say so in one line. Don't patch SLC unasked. Johno reviews the list, including from his phone in a Claude cloud session, and picks what to patch. Started 2026-09-30. It replaces `claude-skills` things-to-do notes for SLC.
 
 ## Important Notes
 
@@ -793,7 +646,6 @@ Read these files when you need the full template structure or additional guidanc
 - **Screenshots are never a question.** Step 0 of Workflow 4 is not gated on asking, on log type, or on whether the image was already transcribed into the body. Extract, verify, save. "Want me to attach it?" is the wrong move.
 - Ask which log type if unclear
 - Ask which tool to document for
-- Confirm before creating Cursor rules
 - Let user review and edit logs
 
 **Explain the "why":**
@@ -809,7 +661,7 @@ This skill succeeds when:
 
 1. Users can start sessions with clear documentation intent
 2. Knowledge logs are created quickly without thinking about structure
-3. Preferences are captured in a portable, reusable way
+3. Preferences land in `CLAUDE.md`, where every agent reads them
 4. Session summaries are comprehensive yet concise
 5. Cross-referencing via timestamps works seamlessly
 6. The knowledge base improves collaboration over time

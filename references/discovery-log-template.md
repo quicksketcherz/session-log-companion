@@ -56,7 +56,6 @@ Setup: Input → Step1 (Setting: Value) → Step2 → Output
 **Commands that helped solve this:**
 - `[command]` - [What it did / Why it was useful]
 
-**see commands:** `references/COMMANDS.md` for full command reference
 
 ---
 

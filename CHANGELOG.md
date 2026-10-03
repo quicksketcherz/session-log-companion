@@ -22,7 +22,23 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 
 ## ⚠️ Pending upload to claude.ai
 
-_(empty — the repo and the claude.ai install match as of 2026-09-15.)_
+- [2026-10-03] **Pre-flight now enforced in Claude Code** by `scripts/preflight_gate.py`, a PreToolUse hook on Write in `~/.claude/settings.json`. It blocks creating a new session log until a PRE-FLIGHT line is in chat since the last log. Tested live: blocked without the line, allowed with it. `setup-new-computer.command` adds the hook on a new Mac. claude.ai has no hooks, so it is prose-only there.
+- [2026-10-03] **Removed `master-template.md`, `how-to-use-session-log-companion.md` and `references/COMMANDS.md`**, plus both "add this to COMMANDS.md?" steps (Workflow 4 Step 7 gone, Step 8 → 7). The 4 real commands from COMMANDS.md: the Illustrator two were already in LC `references/commands.md`, `mdls` already in TSC `gotchas/render-and-output.md`, and `scriptErrors(recurse=True)` moved into TSC `references/debugging-checklist.md` §6. README / INSTALL / knowledge-log templates no longer point at them.
+- [2026-10-03] **AI Rules Logs removed** — the section, the old Step 6, the post-session check and the example. Steps 7–9 became 6–8.
+- [2026-10-03] **Cursor removed** — Platform Awareness, "Use with Any AI", and the Cursor rules step are gone.
+- [2026-10-03] **Model name filled in by the agent** — no more `USER_FILL_WHAT_AI_MODEL_NAME_WAS_USED`. Claude Code names the model in its system prompt.
+- [2026-10-03] **Workflow 3 retired: no more preference logs.** "Remember this" now goes to the global `CLAUDE.md` (or project memory, a skill's IMPROVEMENTS.md, or DNC learned-patterns). Only one preference log was ever written (2026-05-31). Description updated.
+- [2026-10-03] **"sl and dn" in one message:** SL writes first, DN files, then SL fills in two links — the daily note in `see notes:`, and Next Steps becomes one line pointing at DN's things-to-do note (the only live list). Workflow 1b follows that link and shows only unticked items. SL alone keeps a normal Next Steps list.
+- [2026-10-03] **Short kickoff ask** (Step 3): one line on what the knowledge log covers, one ❓ with the agent's pick of folder, one 🟢 saying where the session log goes.
+- [2026-10-03] **Step 0 re-scans the jsonl just before saving**, so a screenshot posted late still gets attached.
+- [2026-10-03] **`note.` / `fleet` captures caught** (Step 2) with DNC's `list_captures.py`; new optional **Notes captured** section in the template; PRE-FLIGHT gains `notes: N caught / N placed`.
+- [2026-10-03] **Session log takes the worksession title.** When DNC gave one this chat (`YYYY-MM-DD-HHMM-worksession-…-TERM`), Step 4 uses it as the filename and heading from the start, and adds a "worksession title" row to Files Created/Modified. No more renames.
+- [2026-10-03] **New required section: Decisions in force**, just above Next Steps, in SKILL.md and the template. Rules that still hold next session.
+- [2026-10-03] **Workflow 1b scans sketch folders too** — `session-logs/` plus every `*/session-logs/` one level down, newest 5 pooled — and reads Decisions in force before Next Steps.
+- [2026-10-03] **New "Works with the other skills" section** — the same short map of DNC / SLC / TSC / LC / Review Companion that all four skills now carry.
+- [2026-09-24] **New trigger phrases: "do slc", "lets do slc", "do sl", "do a session log".** Johno opened his SLC request with "lets do slc" and none of these were on the list; it worked only because the agent understood it. "Comprehensive" cut from the description's first word to keep it under claude.ai's 1024-byte limit (now 1011).
+- [2026-09-17] **AI Rules Logs flagged as a RETIRE CANDIDATE** — the section and Step 6 both carry a ⚠️ block saying do not offer it and do not create `ai_rules_logs/` folders. Six months, one file, 0 bytes, and the whole thing is built around Cursor's `.cursor/rules/`, which is not where Johno's agent rules live. `CLAUDE.md`, DNC's `learned-patterns.md` and the per-skill CHANGELOGs already cover it. Deletion happens in the tightening pass, not tonight — the section stays visible so the pass can see what it is removing.
+- [2026-09-17] Tightening pass queued → `daily-notes/2026-09-17-1910-things-to-do-tighten-and-modernise-slc-claude-skills.md`
 
 ## ✅ Live on claude.ai
 

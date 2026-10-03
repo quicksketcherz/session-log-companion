@@ -2,7 +2,7 @@
 
 **Use for:** Recording what happened in each work session
 
-**Naming:** `YYYY-MM-DD-HHMM-Session-Title.md`
+**Naming:** `YYYY-MM-DD-HHMM-Session-Title.md`, or the exact worksession title from DNC when this chat has one (`YYYY-MM-DD-HHMM-worksession-short-description-TERM.md`). Then the heading is `# Session: <that title>` and Files Created/Modified gets a row: `` `<title>` `` | — | worksession title.
 
 **Get timestamp:** `date "+%Y-%m-%d %H%M"`
 
@@ -13,10 +13,8 @@
 
 **Date:** YYYY-MM-DD  
 **Time:** HHMM  
-**AI Assistant:** USER_FILL_WHAT_AI_MODEL_NAME_WAS_USED  
-**AI Platform:** [Claude/Cursor/Gemini/ChatGPT/etc.]
-
-<!-- TODO: Fill in AI Assistant model name from your model selector (e.g., Claude 3.5 Sonnet, GPT-4, Gemini 1.5 Pro) -->
+**AI Assistant:** [the model, from the system prompt, e.g. Opus 5.5]  
+**AI Platform:** [Claude Code / claude.ai]
 
 ---
 
@@ -94,6 +92,17 @@ When user requests documentation, ask which tool to document for, determine log 
 
 ---
 
+## Notes captured
+
+Every `note.` / `fleet` line Johno typed this session (from `list_captures.py`), and where it went.
+Leave this section out when there were none.
+
+| Time | Note (first words) | Went to |
+|------|--------------------|---------|
+| HHMM | [first words] | [knowledge log / IMPROVEMENTS.md / memory / things-to-do / this log] |
+
+---
+
 ## Honest Self-Assessment
 
 **Required — never skip this section.**
@@ -107,9 +116,25 @@ validated by results" rather than deleting the heading.
 
 ---
 
+## Decisions in force
+
+**Required.** Rules settled this session (or earlier) that still hold next time. One line each.
+The next chat reads these before Next Steps, so it doesn't re-argue them. If nothing was
+decided, write "None new".
+
+- [Decision] — [why, in a few words]
+
+---
+
 ## Next Steps
 
 - [ ] [Next task]
+
+<!-- When DN ran in the same message, replace the list with one line:
+→ daily-notes/YYYY-MM-DD-HHMM-things-to-do-<desc>-<TERM>.md
+That note is the live list. -->
+
+**see notes:** daily note → `daily-notes/YYYY-MM-DD-HHMM-worksession-<desc>-<TERM>.md` (when DN ran)
 
 ---
 
