@@ -22,6 +22,12 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 
 ## ⚠️ Pending upload to claude.ai
 
+_Nothing waiting._
+
+## ✅ Live on claude.ai
+
+**Uploaded 2026-10-03** — `session-log-companion-2026-10-03.zip`, 13 files. First upload since 2026-09-15.
+
 - [2026-10-03] Committed and pushed to GitHub as `3abcb5f` (first push since 2026-09-15).
 - [2026-10-03] **Pre-flight now enforced in Claude Code** by `scripts/preflight_gate.py`, a PreToolUse hook on Write in `~/.claude/settings.json`. It blocks creating a new session log until a PRE-FLIGHT line is in chat since the last log. Tested live: blocked without the line, allowed with it. `setup-new-computer.command` adds the hook on a new Mac. claude.ai has no hooks, so it is prose-only there.
 - [2026-10-03] **Removed `master-template.md`, `how-to-use-session-log-companion.md` and `references/COMMANDS.md`**, plus both "add this to COMMANDS.md?" steps (Workflow 4 Step 7 gone, Step 8 → 7). The 4 real commands from COMMANDS.md: the Illustrator two were already in LC `references/commands.md`, `mdls` already in TSC `gotchas/render-and-output.md`, and `scriptErrors(recurse=True)` moved into TSC `references/debugging-checklist.md` §6. README / INSTALL / knowledge-log templates no longer point at them.
@@ -40,9 +46,6 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 - [2026-09-24] **New trigger phrases: "do slc", "lets do slc", "do sl", "do a session log".** Johno opened his SLC request with "lets do slc" and none of these were on the list; it worked only because the agent understood it. "Comprehensive" cut from the description's first word to keep it under claude.ai's 1024-byte limit (now 1011).
 - [2026-09-17] **AI Rules Logs flagged as a RETIRE CANDIDATE** — the section and Step 6 both carry a ⚠️ block saying do not offer it and do not create `ai_rules_logs/` folders. Six months, one file, 0 bytes, and the whole thing is built around Cursor's `.cursor/rules/`, which is not where Johno's agent rules live. `CLAUDE.md`, DNC's `learned-patterns.md` and the per-skill CHANGELOGs already cover it. Deletion happens in the tightening pass, not tonight — the section stays visible so the pass can see what it is removing.
 - [2026-09-17] Tightening pass queued → `daily-notes/2026-09-17-1910-things-to-do-tighten-and-modernise-slc-claude-skills.md`
-
-## ✅ Live on claude.ai
-
 **Uploaded 2026-09-15** — `session-log-companion-2026-09-15.zip`, 12 files, description 971/1024 bytes. First time this scoreboard has been cleared since it started on 2026-09-06; everything below had been waiting.
 
 - [2026-09-15] **Workflow 4b got a bar instead of a ban — and the cross-reference now goes both ways.** Superseded the same-day "user-invoked only" guard, which over-corrected: Johno's read is that suggesting a split is *useful*, because separating is what makes each log findable in its own project folder, and a `see notes:` pointer is what keeps them tied together. So 4b may now be suggested — but only when **all four** tests hold: different project/area (different folder, not just a different topic), it produced its own artifacts, it could stand alone, and the two logs would be filed in different folders. Any one failing → one log, don't raise it. The ask is once, before writing, in one line naming both halves; no answer means one log. The 2026-09-07 failure is kept as the worked example — it failed tests 1, 2 and 4. **Step 4 reversed:** it used to say leave the original log untouched because the branch log links back; that is a dead end for anyone starting from the original, so the original now gains a `see notes:` line pointing at the branch. Still the only edit to it — no restripping scope. Description re-measured at 984 bytes

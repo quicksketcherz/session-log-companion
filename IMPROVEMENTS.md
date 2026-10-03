@@ -13,8 +13,6 @@ The inbox for fixing and improving this skill. Bugs and ideas land here while Jo
 ## Tighten and modernise
 _Moved from `daily-notes/2026-09-17-1910-things-to-do-tighten-and-modernise-slc-claude-skills.md`, which has the full detail for each item._
 
-- [ ] [2026-09-17] Then package and re-upload to claude.ai: `resources/skills-JB/package-skill.sh session-log-companion`
-- [ ] [2026-09-17] While there, package and upload DNC too
 
 - [ ] [2026-10-03] `TEST-SCENARIOS.md` is out of date: it still tests preference logs, COMMANDS.md and Cursor. Rewrite it for what SLC does now, or remove it. README.md and INSTALL.md need the same check before sharing (goes with the DN + SLC packaging item) — seen in: claude-skills
 
