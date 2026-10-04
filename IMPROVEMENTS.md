@@ -30,7 +30,6 @@ _Moved from `daily-notes/2026-09-18-0200-things-to-do-slc-copy-paste-reference-p
 ## DN and SLC together
 _Moved from `daily-notes/2026-09-26-1415-things-to-do-dn-and-slc-working-together-claude-skills.md`._
 
-- [ ] [2026-10-03] **Streamline SL, in its own chat.** Go through the session log format with Johno: cut sections that repeat the daily note, and reshape Next Steps now that it links to the things-to-do note when DN runs. Do DN in the same pass (DNC IMPROVEMENTS.md has the twin item). The grill on how DN and SL work together was done 2026-10-03: one message, SL first, then DN — seen in: claude-skills
 - [ ] [2026-09-26] Package DN + SLC together for sharing: one download, a readme saying DN to start and catch ideas, SLC for the session log
 
 ## New

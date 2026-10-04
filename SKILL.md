@@ -341,8 +341,8 @@ No list of options, no explaining what a knowledge log is. Wait for his answer, 
 3. Fill in all sections based on session review
 4. Use "see notes:" pattern to reference any knowledge logs created
 5. Include a "Guides to Update Later" section if applicable
-6. **Always include an "Honest Self-Assessment" section** — see required sections below
-7. **Always end with a "Session Insight" section** — see required sections below
+6. **Include an "Honest Self-Assessment" section** — unless DN runs in the same message (see required sections below)
+7. **End with a "Session Insight" section** — unless DN runs in the same message (see required sections below)
 8. Save to: `session-logs/YYYY-MM-DD-HHMM-Session-Title.md` — or, if Step 0 pulled out screenshots, to `session-logs/YYYY-MM-DD-HHMM-Session-Title/` with the `.md` and `attachments/` inside (see *Attachments & log folders*)
 
 **Name the log after the worksession title, when there is one.** Before writing, look back through this chat for a worksession title DNC gave. It sits alone in a fence, in this shape: `YYYY-MM-DD-HHMM-worksession-short-description-TERM`. Johno gets one when he asks "give me a title for this session". If there is one:
@@ -354,17 +354,19 @@ No list of options, no explaining what a knowledge log is. Wait for his answer, 
 - **see notes:** the daily note for this block — `daily-notes/<worksession note>`.
 - **Next Steps:** one line pointing at the things-to-do note DNC just filed, instead of the items themselves. Example: `→ daily-notes/2026-10-03-1542-things-to-do-cloud-base-and-comp-clouds-next-TD-SKETCHES26.md`. That note is the only live list. Ticks happen there, so a second copy here would go stale.
 
-When SL runs without DN, Next Steps stays a normal list. Why (2026-10-03): in the 10-03 clouds block the same 5 next steps sat in both files, and only the daily note copy ever got ticked. Session logs linked back to their daily note only about half the time.
+Leave out **Honest Self-Assessment** and **Session Insight**. DNC covers both in the daily note's `**how the session went:**` part (its "try next time" line takes the insight's place), where Johno reviews how the work with agents is going. The log then ends at Notes & Observations.
+
+When SL runs without DN, Next Steps stays a normal list, and the log keeps both sections. Why (2026-10-03): in the 10-03 clouds block the same 5 next steps sat in both files, and only the daily note copy ever got ticked. Session logs linked back to their daily note only about half the time.
 
 If there is no worksession title, name it `YYYY-MM-DD-HHMM-Session-Title` as usual. Why (2026-10-01, TD-SKETCHES26): a log was first written as `…-Spider-Web-Moonlight-Look-And-Character-Base.md` and then had to be renamed, with 4 links fixed.
 
-**Required sections (always include):**
+**Required sections:**
 
-- **Honest Self-Assessment** — placed after testing/accomplishments and before "Carry Forward to Next Session." Names what didn't work, what's untested, what's parked, and what the agent or user might be pattern-matching ahead of evidence. The point is to prevent future-self from reading the log and assuming everything was settled when it wasn't. Keep it short — 2–4 honest bullet points or a short paragraph. If the session genuinely had no caveats worth flagging, write "No significant caveats — everything tested was validated by results" rather than skipping the section.
+- **Honest Self-Assessment** — required when SL runs without DN; with DN in the same message it moves to the daily note (see above). Why (2026-10-03): in the log it got read once and missed; in the daily note it sits with the rest of the day for review. placed after testing/accomplishments and before "Carry Forward to Next Session." Names what didn't work, what's untested, what's parked, and what the agent or user might be pattern-matching ahead of evidence. The point is to prevent future-self from reading the log and assuming everything was settled when it wasn't. Keep it short — 2–4 honest bullet points or a short paragraph. If the session genuinely had no caveats worth flagging, write "No significant caveats — everything tested was validated by results" rather than skipping the section.
 
 - **Decisions in force** — placed just above Next Steps. The rules settled in this session or earlier that still apply next time, such as "4 × 33-min sessions", "720 × 1280", or "the build moves to `candle-flame/`". One line each, short. Next Steps says what to do. This says what not to re-argue. Workflow 1b reads it. If nothing was decided, write "None new" rather than skipping it. Why (2026-10-02, TD-SKETCHES26): the plan for the month was in one log, but the next chat only picked up the to-do list and lost the rules.
 
-- **Session Insight** — the final section of every session log. One sentence (not a list, not a paragraph) on what changed about how the user works, or what design principle the session surfaced. The constraint of "one sentence" is the design — it forces a *meta* observation rather than a recap. If you can't condense it to one sentence, the insight isn't ready yet.
+- **Session Insight** — the final section when SL runs without DN; with DN it moves to the daily note, same as Honest Self-Assessment. One sentence (not a list, not a paragraph) on what changed about how the user works, or what design principle the session surfaced. The constraint of "one sentence" is the design — it forces a *meta* observation rather than a recap. If you can't condense it to one sentence, the insight isn't ready yet.
 
 **Key principles for session logs:**
 - Keep it concise - use "see notes:" to reference detailed documentation
@@ -372,7 +374,8 @@ If there is no worksession title, name it `YYYY-MM-DD-HHMM-Session-Title` as usu
 - Only list project files in "Files Created/Modified" (not the logs themselves). The one exception is the worksession title row (see Step 4)
 - Capture the "why" behind decisions, not just the "what"
 - Capture the texture of the session, not just the outputs — the *how* of the work is what makes logs worth re-reading later
-- Fill in **AI Assistant** with the model you are running as. Claude Code names it in the system prompt. Never leave a placeholder for Johno to fill
+- No header block (date, time, model, platform) and no Applications Used table. The file name has the date and time, and the work names its tools. Cut 2026-10-03: the model line was left as a placeholder, and nobody read the rest.
+- No Knowledge Logs Created table. Each knowledge log is linked under its Key Learning, with the challenge and solution. No closing "Session ended" line either; Session Focus already says it.
 
 **Note on template file:** If `references/session-log-template.md` exists in the project, it should also be updated to include the Honest Self-Assessment and Session Insight sections so the template and this SKILL.md stay aligned.
 
@@ -399,10 +402,10 @@ This workflow prevents breaking the user's flow during discovery while ensuring 
 
 **Check these sections of the session log:**
 
-1. **"Knowledge Logs Created" section** — If discoveries/learnings happened but no logs were created:
+1. **"Key Learnings" section** — If discoveries/learnings happened but no logs were created:
    - Say: "I noticed we discovered [X]. Should I create a knowledge log for this?"
    - If yes, create appropriate knowledge log in `resources/[tool]-knowledge-logs/`
-   - Update session log to include the new knowledge log
+   - Link the new knowledge log under its Key Learning
 
 2. **"Guides to Update Later" section** — If guide corrections are listed:
    - Say: "Should I update the guides now with the corrections we found?"
@@ -423,7 +426,7 @@ Summarize what was documented:
 **If user requests additional knowledge logs AFTER session log is written:**
 
 1. **Create the knowledge log** — Use same timestamp as session log
-2. **Update the session log** — Add new knowledge log to "Knowledge Logs Created" section with "see notes:" reference and "(added post-session)" notation
+2. **Update the session log** — Link the new knowledge log under its Key Learning with a "see notes:" reference and "(added post-session)"
 3. **Keep it accurate** — Session log should reflect ALL knowledge logs from that session
 
 **Example interaction:**

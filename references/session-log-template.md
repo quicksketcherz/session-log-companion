@@ -11,19 +11,6 @@
 ```markdown
 # Session: [Session Title]
 
-**Date:** YYYY-MM-DD  
-**Time:** HHMM  
-**AI Assistant:** [the model, from the system prompt, e.g. Opus 5.5]  
-**AI Platform:** [Claude Code / claude.ai]
-
----
-
-## Applications Used
-
-| Application | Version | Purpose |
-|-------------|---------|---------|
-| [Tool Name] | [Version] | [What it was used for] |
-
 ---
 
 ## Session Focus
@@ -38,7 +25,7 @@
 
 **Summary:** [1-2 sentence overview of what was accomplished]
 
-**Application:** [Tool used]
+**Problem:** [what was in the way, or why this was needed — one line. Leave out when there was none]
 
 **see notes:** [Link to knowledge log/resource/artifact if applicable - describe what's there]
 
@@ -52,9 +39,17 @@
 
 ### [Learning Topic]
 
-**Application:** [Tool name]  
 **Challenge:** [Issue addressed]  
-**Solution:** [How it was solved]
+**Solution:** [How it was solved]  
+**see notes:** `resources/[tool]-knowledge-logs/YYYY-MM-DD-HHMM-Title.md` (when a knowledge log covers it)
+
+This is where knowledge logs are linked. There is no separate Knowledge Logs table.
+
+**Note for AI:** Only create knowledge logs when user explicitly asks to document. The criteria below describe WHAT to document when asked, not when to automatically create logs:
+- **Discovery Log:** Hit impasse, AI wrong, revealed tool principle
+- **Learning Log:** Significant Q&A session, understanding concepts, filling knowledge gaps
+
+When user requests documentation, ask which tool to document for, determine log type, then create in appropriate `[tool]-knowledge-logs` folder.
 
 ---
 
@@ -78,20 +73,6 @@
 
 ---
 
-## Knowledge Logs Created
-
-| Knowledge Log | Tool | Type | Topic |
-|---------------|------|------|-------|
-| `resources/[tool]-knowledge-logs/YYYY-MM-DD-HHMM-Title.md` | [Tool] | Discovery/Learning | [Brief description] |
-
-**Note for AI:** Only create knowledge logs when user explicitly asks to document. The criteria below describe WHAT to document when asked, not when to automatically create logs:
-- **Discovery Log:** Hit impasse, AI wrong, revealed tool principle
-- **Learning Log:** Significant Q&A session, understanding concepts, filling knowledge gaps
-
-When user requests documentation, ask which tool to document for, determine log type, then create in appropriate `[tool]-knowledge-logs` folder.
-
----
-
 ## Notes captured
 
 Every `note.` / `fleet` line Johno typed this session (from `list_captures.py`), and where it went.
@@ -105,7 +86,8 @@ Leave this section out when there were none.
 
 ## Honest Self-Assessment
 
-**Required — never skip this section.**
+**Required when SL runs without DN.** When DN runs in the same message, leave this section out:
+it goes in the daily note as `**how the session went:**` instead.
 
 What didn't work, what's untested, what's parked, and anything either party may be pattern-matching
 ahead of the evidence. 2-4 honest bullets or a short paragraph. The purpose is to stop future-you
@@ -146,15 +128,12 @@ That note is the live list. -->
 
 ## Session Insight
 
-**Required — always the final section. One sentence, not a list, not a paragraph.**
+**Required when SL runs without DN — then it is the final section. One sentence, not a list, not a paragraph.**
+When DN runs in the same message, leave it out: the daily note's `**how the session went:**` covers it in its "try next time" line.
 
 What changed about how the user works, or what design principle the session surfaced. The
 one-sentence limit is the design: it forces a *meta* observation instead of a recap. If it can't be
 condensed to one sentence, the insight isn't ready yet.
-
----
-
-*Session ended: [Brief summary]*
 ```
 
 ---
