@@ -75,7 +75,7 @@ When user requests documentation, ask which tool to document for, determine log 
 
 ## Notes captured
 
-Every `note.` / `fleet` line Johno typed this session (from `list_captures.py`), and where it went.
+Every `note.` / `fleet` line the user typed this session (from `list_captures.py`), and where it went.
 Leave this section out when there were none.
 
 | Time | Note (first words) | Went to |
@@ -84,17 +84,20 @@ Leave this section out when there were none.
 
 ---
 
-## Honest Self-Assessment
+## How the Session Went
 
 **Required when SL runs without DN.** When DN runs in the same message, leave this section out:
-it goes in the daily note as `**how the session went:**` instead.
+the daily note has the same part, `**how the session went:**`.
 
-What didn't work, what's untested, what's parked, and anything either party may be pattern-matching
-ahead of the evidence. 2-4 honest bullets or a short paragraph. The purpose is to stop future-you
-reading this log and assuming everything was settled when it wasn't.
+The agent checks its own work, in five short lines (the shape of an after-action review):
 
-If the session genuinely had no caveats, write "No significant caveats — everything tested was
-validated by results" rather than deleting the heading.
+- **set out to:** [the aim]
+- **what happened:** [what got done, what didn't]
+- **why the gap:** [the cause, often something the agent did]
+- **worked well:** [a way of working worth keeping]
+- **try next time:** [one change in how the user and agent work together — not a task]
+
+If nothing went wrong, say so under "why the gap" rather than leave the section out.
 
 ---
 
@@ -123,17 +126,6 @@ That note is the live list. -->
 ## Notes & Observations
 
 [Additional notes, design decisions]
-
----
-
-## Session Insight
-
-**Required when SL runs without DN — then it is the final section. One sentence, not a list, not a paragraph.**
-When DN runs in the same message, leave it out: the daily note's `**how the session went:**` covers it in its "try next time" line.
-
-What changed about how the user works, or what design principle the session surfaced. The
-one-sentence limit is the design: it forces a *meta* observation instead of a recap. If it can't be
-condensed to one sentence, the insight isn't ready yet.
 ```
 
 ---
@@ -142,7 +134,7 @@ condensed to one sentence, the insight isn't ready yet.
 
 **Read this file, not a previous log.** A finished session log is an *example*; this file is the
 *spec*. Working out the shape by opening the last log silently drops whatever sections that log
-happened to omit — which is exactly how the Honest Self-Assessment and Session Insight sections went
+happened to omit — which is exactly how the self-assessment and insight sections went
 missing from logs on 2026-08-22 and 2026-09-07.
 
 **Keep it concise:** When knowledge logs exist, use brief summaries with "see notes:" references instead of duplicating content.

@@ -1,6 +1,6 @@
 # SLC improvements
 
-The inbox for fixing and improving this skill. Bugs and ideas land here while Johno is working with an agent. Review it anywhere, including on the phone in a Claude cloud session, and pick what to patch.
+The inbox for fixing and improving this skill. Bugs and ideas land here while the user is working with an agent. Review it anywhere, including on the phone in a Claude cloud session, and pick what to patch.
 
 **How it works**
 - **Add:** one line per idea, as `- [ ] [YYYY-MM-DD] what went wrong or what's wanted — seen in: <project>`. Newest at the bottom of its group.

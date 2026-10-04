@@ -10,7 +10,7 @@ to print the line first.
 
 Edits, rewrites of an existing log, and every other file pass straight through.
 If anything goes wrong reading the transcript, it lets the Write go: a broken
-check must never block Johno's work.
+check must never block the user's work.
 
 Why (2026-10-03): the pre-flight line was written after the log on 08-22,
 09-07 and 09-17. Prose in SKILL.md could not make it come first; this can.

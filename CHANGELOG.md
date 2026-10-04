@@ -22,7 +22,9 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 
 ## ⚠️ Pending upload to claude.ai
 
-_Nothing waiting._
+- [2026-10-03] Honest Self-Assessment and Session Insight became one section, **How the Session Went** (set out to · what happened · why the gap · worked well · try next time), to match the daily note. It is in the log only when DN doesn't run.
+- [2026-10-03] SLC calls the person "the user" instead of "Johno", so it works for colleagues. Preferences go to `~/.claude/CLAUDE.md`, not a path on Johno's Mac.
+- [2026-10-03] SLC has its own copy of `scripts/list_captures.py`, so the `note.` / `fleet` check works without DNC installed.
 
 ---
 

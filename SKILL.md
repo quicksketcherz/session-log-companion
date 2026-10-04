@@ -250,12 +250,12 @@ Agent: *Creates discovery log at `resources/touchdesigner-knowledge-logs/2026-03
 
 ### Workflow 3: Preferences go to CLAUDE.md, not a log
 
-SLC no longer writes preference logs. When Johno says "remember this", "remember this preference", "make this a pref", or "I want to improve how you work with me", save it where his agents actually read it:
+SLC no longer writes preference logs. When the user says "remember this", "remember this preference", "make this a pref", or "I want to improve how you work with me", save it where their agents actually read it:
 
-- **About how he works with any agent, across his work** → his global `CLAUDE.md`: `resources/my-claude-preferences/CLAUDE.md` (`~/.claude/CLAUDE.md` links to it).
+- **About how they work with any agent, across all their work** → their global `~/.claude/CLAUDE.md`.
 - **About one project only** → that project's memory.
 - **About how one skill works** → that skill's `IMPROVEMENTS.md`.
-- **About how he writes daily notes** (tags, types, habits) → DNC's `references/learned-patterns*.md`.
+- **About how they write daily notes** (tags, types, habits) → DNC's `references/learned-patterns*.md`, if they use DNC.
 
 Say in one line where it went. The global `CLAUDE.md` has the same rule under *Where my preferences get saved*. That file wins if the two ever differ.
 
@@ -273,7 +273,7 @@ When the user wants to wrap up and create a session log:
 
 **How:** find the most recently modified jsonl at `~/.claude/projects/<project-slug>/<session-uuid>.jsonl` and extract every uploaded image. **Visually verify each image belongs to this project and prune strays** — `@`-referencing another note folder during the chat embeds that folder's images into the jsonl, so the extractor picks those up too.
 
-**Scan the jsonl again just before saving.** Johno often posts one more screenshot while the log is being written, or after the ask in Step 3. Run the extractor a second time right before the save, and add anything new. Why (2026-09-30, td-project-templates-JB): the last screenshot came in after Step 0 had run and had to be copied by hand.
+**Scan the jsonl again just before saving.** The user often posts one more screenshot while the log is being written, or after the ask in Step 3. Run the extractor a second time right before the save, and add anything new. Why (2026-09-30, td-project-templates-JB): the last screenshot came in after Step 0 had run and had to be copied by hand.
 
 **The one thing that can stop this step:** DNC owns the images for this work block. See *Who owns the screenshots: DNC or SLC* — check that first, and if DNC owns them, link to them instead of copying. Nothing else stops this step.
 
@@ -304,10 +304,10 @@ When the user wants to wrap up and create a session log:
 
 **If found:** These become **separate knowledge log files**, referenced in the session log with "see notes:" — NOT included inline in the session log.
 
-**Also catch every `note.` and `fleet` line.** Johno starts a message with `note.` or `fleet` to catch a thought mid-session. Don't trust your memory of the chat for these. Run DNC's script, which reads them from the jsonl:
+**Also catch every `note.` and `fleet` line.** The user starts a message with `note.` or `fleet` to catch a thought mid-session. Don't trust your memory of the chat for these. Run SLC's script, which reads them from the jsonl:
 
 ```bash
-python3 ~/.claude/skills/daily-notes-companion/scripts/list_captures.py
+python3 ~/.claude/skills/session-log-companion/scripts/list_captures.py <this chat's jsonl>
 ```
 
 Each one lands somewhere: a knowledge log, a skill's `IMPROVEMENTS.md`, memory, a things-to-do note, or the session log itself. The session log gets a short **Notes captured** section listing each one and where it went. Count them for the PRE-FLIGHT line (`notes: N caught / N placed`). If the two numbers differ, place the rest before writing. Why (2026-09-30, TD-HALLOWEEN26): this list didn't include `note.` or `fleet`, so those captures were missed in session logs.
@@ -332,7 +332,7 @@ Each one lands somewhere: a knowledge log, a skill's `IMPROVEMENTS.md`, memory, 
 🟢 The session log itself will go in `td-project-templates-JB/session-logs/`.
 ```
 
-No list of options, no explaining what a knowledge log is. Wait for his answer, then go on. Why (2026-09-30, td-project-templates-JB): Johno liked this shape: *"saves tokens … best suggesting where to save"*.
+No list of options, no explaining what a knowledge log is. Wait for the answer, then go on. Why (2026-09-30, td-project-templates-JB): The user liked this shape: *"saves tokens … best suggesting where to save"*.
 
 #### Step 4: Generate Session Log
 
@@ -341,32 +341,30 @@ No list of options, no explaining what a knowledge log is. Wait for his answer, 
 3. Fill in all sections based on session review
 4. Use "see notes:" pattern to reference any knowledge logs created
 5. Include a "Guides to Update Later" section if applicable
-6. **Include an "Honest Self-Assessment" section** — unless DN runs in the same message (see required sections below)
-7. **End with a "Session Insight" section** — unless DN runs in the same message (see required sections below)
+6. **Include a "How the Session Went" section** — unless DN runs in the same message (see required sections below)
 8. Save to: `session-logs/YYYY-MM-DD-HHMM-Session-Title.md` — or, if Step 0 pulled out screenshots, to `session-logs/YYYY-MM-DD-HHMM-Session-Title/` with the `.md` and `attachments/` inside (see *Attachments & log folders*)
 
-**Name the log after the worksession title, when there is one.** Before writing, look back through this chat for a worksession title DNC gave. It sits alone in a fence, in this shape: `YYYY-MM-DD-HHMM-worksession-short-description-TERM`. Johno gets one when he asks "give me a title for this session". If there is one:
+**Name the log after the worksession title, when there is one.** Before writing, look back through this chat for a worksession title DNC gave. It sits alone in a fence, in this shape: `YYYY-MM-DD-HHMM-worksession-short-description-TERM`. The user gets one when they ask "give me a title for this session". If there is one:
 - Use that exact string as the filename (`<title>.md`, or `<title>/` for a log folder) **and** as the heading (`# Session: <title>`). Don't make up a Title-Case name, and don't rename later.
 - Add one row to **Files Created/Modified**: `` `<title>` `` | — | worksession title. Nothing more in the row.
 - This way the session log and the daily note share one name, so either one finds the other.
 
-**When Johno asks for SL and DN in one message** ("lets do a sl and dn", "sl and dn"): write the session log **first**, then run DNC to file. Then come back to the log and fill in two links:
+**When the user asks for SL and DN in one message** ("lets do a sl and dn", "sl and dn"): write the session log **first**, then run DNC to file. Then come back to the log and fill in two links:
 - **see notes:** the daily note for this block — `daily-notes/<worksession note>`.
 - **Next Steps:** one line pointing at the things-to-do note DNC just filed, instead of the items themselves. Example: `→ daily-notes/2026-10-03-1542-things-to-do-cloud-base-and-comp-clouds-next-TD-SKETCHES26.md`. That note is the only live list. Ticks happen there, so a second copy here would go stale.
 
-Leave out **Honest Self-Assessment** and **Session Insight**. DNC covers both in the daily note's `**how the session went:**` part (its "try next time" line takes the insight's place), where Johno reviews how the work with agents is going. The log then ends at Notes & Observations.
+Leave out **How the Session Went**. The daily note has the same part, `**how the session went:**`, where the user reviews how the work with agents is going. The log then ends at Notes & Observations.
 
-When SL runs without DN, Next Steps stays a normal list, and the log keeps both sections. Why (2026-10-03): in the 10-03 clouds block the same 5 next steps sat in both files, and only the daily note copy ever got ticked. Session logs linked back to their daily note only about half the time.
+When SL runs without DN, Next Steps stays a normal list, and the log keeps How the Session Went. Why (2026-10-03): in the 10-03 clouds block the same 5 next steps sat in both files, and only the daily note copy ever got ticked. Session logs linked back to their daily note only about half the time.
 
 If there is no worksession title, name it `YYYY-MM-DD-HHMM-Session-Title` as usual. Why (2026-10-01, TD-SKETCHES26): a log was first written as `…-Spider-Web-Moonlight-Look-And-Character-Base.md` and then had to be renamed, with 4 links fixed.
 
 **Required sections:**
 
-- **Honest Self-Assessment** — required when SL runs without DN; with DN in the same message it moves to the daily note (see above). Why (2026-10-03): in the log it got read once and missed; in the daily note it sits with the rest of the day for review. placed after testing/accomplishments and before "Carry Forward to Next Session." Names what didn't work, what's untested, what's parked, and what the agent or user might be pattern-matching ahead of evidence. The point is to prevent future-self from reading the log and assuming everything was settled when it wasn't. Keep it short — 2–4 honest bullet points or a short paragraph. If the session genuinely had no caveats worth flagging, write "No significant caveats — everything tested was validated by results" rather than skipping the section.
+- **How the Session Went** — required when SL runs without DN; with DN in the same message it lives in the daily note instead. Five short lines: set out to · what happened · why the gap · worked well · try next time. "try next time" is one change in how the user and agent work together, not a task. Placed after Notes captured, before Decisions in force. Replaced Honest Self-Assessment and Session Insight on 2026-10-03, to match the daily note: one place for the agent to check its own work, in a shape that shows the gap and the fix.
 
 - **Decisions in force** — placed just above Next Steps. The rules settled in this session or earlier that still apply next time, such as "4 × 33-min sessions", "720 × 1280", or "the build moves to `candle-flame/`". One line each, short. Next Steps says what to do. This says what not to re-argue. Workflow 1b reads it. If nothing was decided, write "None new" rather than skipping it. Why (2026-10-02, TD-SKETCHES26): the plan for the month was in one log, but the next chat only picked up the to-do list and lost the rules.
 
-- **Session Insight** — the final section when SL runs without DN; with DN it moves to the daily note, same as Honest Self-Assessment. One sentence (not a list, not a paragraph) on what changed about how the user works, or what design principle the session surfaced. The constraint of "one sentence" is the design — it forces a *meta* observation rather than a recap. If you can't condense it to one sentence, the insight isn't ready yet.
 
 **Key principles for session logs:**
 - Keep it concise - use "see notes:" to reference detailed documentation
@@ -377,7 +375,7 @@ If there is no worksession title, name it `YYYY-MM-DD-HHMM-Session-Title` as usu
 - No header block (date, time, model, platform) and no Applications Used table. The file name has the date and time, and the work names its tools. Cut 2026-10-03: the model line was left as a placeholder, and nobody read the rest.
 - No Knowledge Logs Created table. Each knowledge log is linked under its Key Learning, with the challenge and solution. No closing "Session ended" line either; Session Focus already says it.
 
-**Note on template file:** If `references/session-log-template.md` exists in the project, it should also be updated to include the Honest Self-Assessment and Session Insight sections so the template and this SKILL.md stay aligned.
+**Note on template file:** If `references/session-log-template.md` exists in the project, it should also be updated to include the How the Session Went section so the template and this SKILL.md stay aligned.
 
 **Documenting code/expressions:** When including code snippets, expressions, scripts, or configurations in session logs, always include context: **Where used** (which file/operator/parameter), **What it does** (brief explanation), and **How it connects** (integration with the rest of the system). Code without context is hard to reuse.
 
@@ -636,7 +634,7 @@ DNC, SLC, TSC and LC often run in the same session. Each keeps to its own job:
 
 ## Improving this skill — `IMPROVEMENTS.md`
 
-When something about **how SLC works** goes wrong or could be better, add one line to `IMPROVEMENTS.md` at the skill root, in the format written there. Say so in one line. Don't patch SLC unasked. Johno reviews the list, including from his phone in a Claude cloud session, and picks what to patch. Started 2026-09-30. It replaces `claude-skills` things-to-do notes for SLC.
+When something about **how SLC works** goes wrong or could be better, add one line to `IMPROVEMENTS.md` at the skill root, in the format written there. Say so in one line. Don't patch SLC unasked. The user reviews the list, including from their phone in a Claude cloud session, and picks what to patch. Started 2026-09-30. It replaces `claude-skills` things-to-do notes for SLC.
 
 ## Important Notes
 
