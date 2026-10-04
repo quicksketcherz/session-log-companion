@@ -22,9 +22,15 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 
 ## ⚠️ Pending upload to claude.ai
 
-- [2026-10-03] Streamlined the session log after reviewing the 10-03 clouds log with Johno. Cut: the header block (date, time, model, platform), Applications Used, the Knowledge Logs Created table and the closing "Session ended" line. Knowledge logs are now linked under each Key Learning. What We Accomplished drops its "Application:" line and gains a "Problem:" line. When DN runs in the same message, Honest Self-Assessment and Session Insight move to the daily note. (as its `how the session went` part).
+_Nothing waiting._
+
+---
 
 ## ✅ Live on claude.ai
+
+**Uploaded 2026-10-03 (2043 zip)** — `session-log-companion-2026-10-03-2043.zip`, 13 files.
+
+- [2026-10-03] Streamlined the session log after reviewing the 10-03 clouds log with Johno. Cut: the header block (date, time, model, platform), Applications Used, the Knowledge Logs Created table and the closing "Session ended" line. Knowledge logs are now linked under each Key Learning. What We Accomplished drops its "Application:" line and gains a "Problem:" line. When DN runs in the same message, Honest Self-Assessment and Session Insight move to the daily note. (as its `how the session went` part).
 
 **Uploaded 2026-10-03** — `session-log-companion-2026-10-03.zip`, 13 files. First upload since 2026-09-15.
 
