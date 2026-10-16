@@ -1,304 +1,166 @@
-# Session Log Companion (SLC) - Installation Guide
+# Install — Session Log Companion (SLC)
 
-**Version:** 1.0  
-**Created:** 2026-03-07
-
----
-### Before You Begin Install.
-
-Open your project folder in Cursor 1st. SLC is installed per-project at the project root.
-
-## How to Install the Session Log Companion Skills
-
-### Step 1: how to create a cursor skills folder (if there's is none)
-
-1. **Ask Cursor to create a `skills` folder for this project.**
-   - (You can do this by saying: “Create a skills folder for this project.”)
-
-2. **If you already have a `/.cursor/skills` folder, continue to the next step.**
-
-### Step 2: copy and paste the session-log-companion Folder
-
-Copy the `session-log-companion` folder and paste it into your Cursor skills folder, so your directory looks like this: `~/.cursor/skills/session-log-companion`.
-
-### Step 3: Restart Cursor
-
-Close and reopen Cursor completely.
-
-### Step 4: Test It
-
-In Cursor, say: **"Start a session for my project"**
-
-   *(This only checks the skill is loaded—it doesn't create a session log. Session logs are created when you say "Summarize this session" at the end of a session.)*
-
-Done! ✓
-
-**Note:** Comfortable with terminal? See "Quick Install Using Terminal" below for a faster method.
+**Main platform:** Claude Code (CLI, desktop app, or IDE extension)
+**Also works in:** claude.ai (upload as a skill) and Cursor. See *Other places* at the bottom.
+**Tested on:** macOS
+**Repo:** <https://github.com/quicksketcherz/session-log-companion> (public, no access needed)
 
 ---
 
-## Quick Install Using Terminal
+## 1. Get the skill
 
-For users comfortable with command line, here's the faster way:
-
-1. **Open Terminal**
-   - Mac: Press `Command + Space`, type "Terminal", press Enter
-   - Windows: Press Windows key, type "PowerShell", press Enter
-   - Linux: Press `Ctrl + Alt + T`
-
-2. **Navigate to where you placed the skill folder**, then run:
-   ```bash
-   mkdir -p ~/.cursor/skills
-   cp -r session-log-companion ~/.cursor/skills/session-log-companion
-   ```
-
-3. **Restart Cursor**
-
-4. **Test it:** Say "Start a session for my project"
-
-   *(This only checks the skill is loaded—it doesn't create a session log. Session logs are created when you say "Summarize this session" at the end of a session.)*
-
-Done! ✓
-
----
-
-## Quick Install (Alternative Method)
-
-To install the session-log-companion skill in Cursor:
-
-### Step 1: Copy to Cursor Skills Directory
-
-Navigate to where you placed the skill folder, then run:
+Clone it straight into your Claude Code skills folder. One command, and `git pull` works for updates later:
 
 ```bash
-# Create the skills directory if it doesn't exist
-mkdir -p ~/.cursor/skills
-
-# Copy the skill
-cp -r session-log-companion ~/.cursor/skills/session-log-companion
+mkdir -p ~/.claude/skills
+git clone https://github.com/quicksketcherz/session-log-companion.git ~/.claude/skills/session-log-companion
 ```
 
-### Step 2: Restart Cursor
+No restart needed. Claude Code picks up new skills right away.
 
-- Close and reopen Cursor
-- Or use Command Palette: "Developer: Reload Window"
+**Editing it yourself?** Clone it where you keep your code and link it in instead, so edits take effect at once:
 
-### Step 3: Test the Skill
+```bash
+git clone https://github.com/quicksketcherz/session-log-companion.git ~/dev/session-log-companion
+mkdir -p ~/.claude/skills
+ln -s ~/dev/session-log-companion ~/.claude/skills/session-log-companion
+```
 
-Try one of these phrases:
-- "Start a session for [your project]"
-- "Document this discovery"
-- "Summarize this session"
+## 2. Add the pre-flight hook (recommended)
 
-   *("Start a session" only verifies the skill is loaded—it doesn't create a session log. Session logs are created when you say "Summarize this session" at the end of a session.)*
+Before it writes a session log, SLC prints one check line:
 
-The skill should trigger and guide you through the workflow.
+```
+PRE-FLIGHT — template: read (N sections) · knowledge logs: asked/none · screenshots: extracted/owned-by-DNC · notes: N caught / N placed
+```
+
+The line makes the agent do the steps it would otherwise skip (read the template, ask about knowledge logs, catch your notes). Words in the skill alone were not enough, so a small hook makes sure the line comes first. It runs before every file write in Claude Code. It only steps in when a **new `.md` file in a `session-logs/` folder** is being written and no PRE-FLIGHT line was printed since the last log. Then it stops the write and tells the agent to print the line. Edits to an existing log are never checked. If anything goes wrong inside the hook, it lets the write through.
+
+Add it with one command:
+
+```bash
+python3 ~/.claude/skills/session-log-companion/scripts/add_preflight_hook.py
+```
+
+It adds this to `~/.claude/settings.json`, keeps everything else there, saves the old file as `settings.json.bak`, and never adds a second copy:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/skills/session-log-companion/scripts/preflight_gate.py",
+            "timeout": 10,
+            "statusMessage": "Checking SLC pre-flight"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Prefer to add it by hand? Paste the `PreToolUse` entry above into your own `settings.json`. To take it out again:
+
+```bash
+python3 ~/.claude/skills/session-log-companion/scripts/add_preflight_hook.py --remove
+```
+
+Needs `python3` on your PATH (any Mac with the Xcode command line tools has it).
+
+## 3. Check it works
+
+```bash
+ls ~/.claude/skills/session-log-companion/
+```
+
+You should see `SKILL.md`, `references/` and `scripts/`.
+
+Then, at the end of any Claude Code session, say:
+
+> do a session log
+
+The agent should print the PRE-FLIGHT line first (as a shell `echo`), then write the log to `session-logs/YYYY-MM-DD-HHMM-<title>.md` in your project folder.
 
 ---
 
-## Alternative: Use from Workspace
+## What you say
 
-If you want to test before installing globally:
+| Say this | What happens |
+|---|---|
+| "do a session log", "do sl", "summarize this session" | writes the session log for this chat |
+| "document this discovery", "create a knowledge log" | a log of a problem solved, or a concept learned, for one tool |
+| "I'm stuck with X" | offers a discovery log once it's solved |
+| "remember this preference" | saves how you like to work into `~/.claude/CLAUDE.md` |
+| "let's continue", "pick up where we left off" | reads the last session log and shows its next steps |
+| "log this tangent" | a separate log for a side branch that belongs in another folder |
 
-1. Keep the `session-log-companion/` folder in your workspace
-2. Reference it manually when needed
-3. Once satisfied, follow the installation steps above (copy & paste or Quick Install Using Terminal)
+## Other skills it works with (all optional)
 
----
+SLC works on its own. It mentions these when they are installed:
 
-## Verify Installation
+- **daily-notes-companion (DNC):** if you use it, SLC links to its notes and leaves the screenshots to it. Without it, SLC does that part itself.
+- **touchdesigner-scaffolding-companion (TSC):** TouchDesigner knowledge logs go in `resources/touchdesigner-knowledge-logs/`, where TSC's gotchas pick them up.
 
-To check if the skill is installed correctly:
-
-```bash
-# List installed skills
-ls -la ~/.cursor/skills/
-
-# You should see:
-# session-log-companion/
-```
-
-Check the skill structure:
+## Update
 
 ```bash
-ls -la ~/.cursor/skills/session-log-companion/
-
-# You should see:
-# SKILL.md
-# README.md
-# TEST-SCENARIOS.md
-# INSTALL.md
-# references/
+git -C ~/.claude/skills/session-log-companion pull
 ```
+
+## Uninstall
+
+```bash
+python3 ~/.claude/skills/session-log-companion/scripts/add_preflight_hook.py --remove
+rm -rf ~/.claude/skills/session-log-companion
+```
+
+Your session logs and knowledge logs stay in your project folders.
 
 ---
 
 ## Troubleshooting
 
-### Skill Not Triggering
+**The skill does not start.** Check the folder is at `~/.claude/skills/session-log-companion/` and holds `SKILL.md`. Then use a plain phrase: "do a session log".
 
-**Problem:** You say "start a session" but nothing happens
+**A session log write gets blocked with "SLC pre-flight missing".** That is the hook working. The agent should print the PRE-FLIGHT line with a shell `echo` in its own step, then write the log again in the next step. A line printed in the same step as the write is not saved yet when the hook looks, so it gets missed.
 
-**Solutions:**
-1. Check installation path: `~/.cursor/skills/session-log-companion/`
-2. Verify SKILL.md has proper YAML frontmatter
-3. Restart Cursor completely
-4. Try more explicit phrases: "I want to create a session log"
+**The hook never seems to run.** Look in `~/.claude/settings.json` for `preflight_gate.py`. Run `add_preflight_hook.py` again; it says if the hook is already there. Check `python3 --version` works in a terminal.
 
-### Permission Errors
+**"is not valid JSON" from the hook installer.** Your `settings.json` has a typo (often a trailing comma). Fix it, then run the installer again. It changes nothing until the file reads cleanly.
 
-**Problem:** Can't copy to `~/.cursor/skills/`
+---
 
-**Solutions:**
+## Other places
+
+**claude.ai:** zip the folder and upload it under Settings → Capabilities → Skills. There is no hook there, so the PRE-FLIGHT line relies on the skill's own words.
+
+**Cursor:** copy the folder into `~/.cursor/skills/` and reload the window:
+
 ```bash
-# Check if directory exists
-ls -la ~/.cursor/
-
-# Create it if needed
 mkdir -p ~/.cursor/skills
-
-# Check permissions
-ls -la ~/.cursor/skills/
-
-# If needed, fix permissions
-chmod 755 ~/.cursor/skills
+git clone https://github.com/quicksketcherz/session-log-companion.git ~/.cursor/skills/session-log-companion
 ```
 
-### Folders Not Created
+The hook is Claude Code only. Preferences go to your own rules file instead of `~/.claude/CLAUDE.md`.
 
-**Problem:** Skill doesn't create `session-logs/` or `resources/` folders
-
-**Solutions:**
-1. Check you're in a writable directory
-2. Verify file permissions in your workspace
-3. Try creating folders manually first:
-   ```bash
-   mkdir -p session-logs
-   mkdir -p resources/agent-companion-preference-logs
-   ```
-
----
-
-## Uninstall
-
-To remove the skill:
-
-```bash
-# Remove from Cursor skills directory
-rm -rf ~/.cursor/skills/session-log-companion
-
-# Restart Cursor
-```
-
-Your documentation (session logs, knowledge logs, preference logs) will remain in your workspace.
-
----
-
-## Update to Future Versions
-
-### If you're using a source folder
-
-**Recommended workflow:** Keep an editable source folder and copy it to Cursor when you make updates.
-
-1. Edit your source folder (wherever you keep it)
-2. Copy to Cursor (overwrites the installed version):
-   ```bash
-   cp -r session-log-companion ~/.cursor/skills/session-log-companion
-   ```
-3. Restart Cursor or reload window
-
-**Tip:** If sharing with colleagues via Dropbox or GitHub, they can pull your updates and run the same copy command.
-
-### If you're updating from a new release
-
-When a new version is released:
-
-1. Backup your current version (optional):
-   ```bash
-   cp -r ~/.cursor/skills/session-log-companion ~/.cursor/skills/session-log-companion.backup
-   ```
-
-2. Remove old version:
-   ```bash
-   rm -rf ~/.cursor/skills/session-log-companion
-   ```
-
-3. Install new version (navigate to where you placed the new version folder first):
-   ```bash
-   cp -r session-log-companion-v2 ~/.cursor/skills/session-log-companion-v2
-   ```
-
-4. Restart Cursor
-
----
-
-## Platform-Specific Notes
-
-### macOS
-
-- Default install path: `~/.cursor/skills/`
-- Use Terminal for installation commands
-- May need to grant Terminal full disk access in System Preferences
-
-### Linux
-
-- Default install path: `~/.cursor/skills/`
-- Use your terminal emulator
-- Check file permissions if issues occur
-
-### Windows
-
-- Default install path: `%USERPROFILE%\.cursor\skills\`
-- Use PowerShell or Command Prompt
-- Adjust paths accordingly:
-  ```powershell
-  # PowerShell (navigate to where you placed the skill folder first)
-  mkdir $env:USERPROFILE\.cursor\skills -Force
-  Copy-Item -Recurse session-log-companion $env:USERPROFILE\.cursor\skills\session-log-companion
-  ```
-
----
-
-## Next Steps
-
-After installation:
-
-1. Read `README.md` for usage guide
-2. Review `TEST-SCENARIOS.md` for examples
-3. Try starting a session: "Start a session for [your project]"
-4. Create your first knowledge log
-5. Teach the agent your preferences
-6. Summarize your session
-
----
-
-## Support
-
-For issues or questions:
-
-1. Check `TEST-SCENARIOS.md` for expected behavior
-2. Review `README.md` for usage tips
-3. Verify installation steps above
-4. Check Cursor's skill documentation
-
----
-
-## What Gets Installed
+## What gets installed
 
 ```
-~/.cursor/skills/session-log-companion/
-├── SKILL.md                    # Main skill file with 4 workflows
-├── README.md                   # Usage guide and quick reference
-├── TEST-SCENARIOS.md           # Test cases (10 scenarios)
-├── INSTALL.md                  # This file
-└── references/
-    ├── discovery-log-template.md    # Discovery log structure
-    ├── learning-log-template.md     # Learning log structure
-    └── session-log-template.md      # Session log structure
+~/.claude/skills/session-log-companion/
+├── SKILL.md                 # the skill itself
+├── README.md                # what it does, in short
+├── INSTALL.md               # this file
+├── CHANGELOG.md             # what changed, newest first
+├── IMPROVEMENTS.md          # ideas waiting to be done
+├── TEST-SCENARIOS.md        # example requests and what should happen
+├── references/              # the session, discovery and learning log templates
+└── scripts/
+    ├── preflight_gate.py      # the hook
+    ├── add_preflight_hook.py  # adds or removes the hook
+    └── list_captures.py       # finds the "note." lines you typed in a chat
 ```
-
-Total size: ~85KB
-
----
-
-**Ready to install?** Use the copy & paste method at the top or Quick Install Using Terminal, then restart Cursor.

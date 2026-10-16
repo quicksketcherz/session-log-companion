@@ -3,7 +3,7 @@
 
 A Claude Code PreToolUse hook on Write. It reads the hook JSON on stdin and only
 acts when the Write creates a new `.md` file inside a `session-logs/` folder.
-Then it looks through this chat's transcript for an assistant text block with
+Then it looks through this chat's transcript for an assistant entry with
 "PRE-FLIGHT" in it, printed AFTER the last session log written in this chat.
 None found -> exit 2 with a message, which stops the Write and tells the agent
 to print the line first.
@@ -14,6 +14,14 @@ check must never block the user's work.
 
 Why (2026-10-03): the pre-flight line was written after the log on 08-22,
 09-07 and 09-17. Prose in SKILL.md could not make it come first; this can.
+
+Why the loose match (2026-10-15): the first version only looked at `text`
+blocks. It blocked the log seven times in eight days although the line had
+been printed: in the Claude desktop app the visible text often lands in a
+`thinking` block, and a line printed in the SAME message as the Write is not
+on disk yet when the hook runs. Now ANY assistant block with the line counts
+(text, thinking, or a Bash `echo` of it), except a Write tool call. A Bash echo
+is the sure way: its entry is on disk before the Write's hook runs.
 """
 import json
 import os
@@ -29,6 +37,43 @@ def is_new_session_log(path):
     )
 
 
+def is_session_log_path(p):
+    return "/session-logs/" in p and p.endswith(".md")
+
+
+def scan(transcript, path):
+    """Line numbers of the last PRE-FLIGHT and the last earlier log Write."""
+    last_preflight = -1
+    last_log_write = -1
+    with open(transcript) as f:
+        for i, line in enumerate(f):
+            if "PRE-FLIGHT" not in line and '"name": "Write"' not in line \
+                    and '"name":"Write"' not in line:
+                continue
+            try:
+                entry = json.loads(line)
+            except Exception:
+                continue
+            if entry.get("type") != "assistant":
+                continue
+            content = (entry.get("message") or {}).get("content") or []
+            if not isinstance(content, list):
+                continue
+            for block in content:
+                if not isinstance(block, dict):
+                    continue
+                if block.get("type") == "tool_use" and block.get("name") == "Write":
+                    p = (block.get("input") or {}).get("file_path", "")
+                    # An earlier session log in this chat, not the one being written now.
+                    if is_session_log_path(p) and p != path:
+                        last_log_write = i
+                    # A Write's own content never counts as the pre-flight line.
+                    continue
+                if "PRE-FLIGHT" in json.dumps(block, ensure_ascii=False):
+                    last_preflight = i
+    return last_preflight, last_log_write
+
+
 def main():
     try:
         data = json.load(sys.stdin)
@@ -41,30 +86,8 @@ def main():
     if not os.path.exists(transcript):
         return 0
 
-    last_preflight = -1
-    last_log_write = -1
     try:
-        with open(transcript) as f:
-            for i, line in enumerate(f):
-                try:
-                    entry = json.loads(line)
-                except Exception:
-                    continue
-                if entry.get("type") != "assistant":
-                    continue
-                content = (entry.get("message") or {}).get("content") or []
-                if not isinstance(content, list):
-                    continue
-                for block in content:
-                    if not isinstance(block, dict):
-                        continue
-                    if block.get("type") == "text" and "PRE-FLIGHT" in block.get("text", ""):
-                        last_preflight = i
-                    elif block.get("type") == "tool_use" and block.get("name") == "Write":
-                        p = (block.get("input") or {}).get("file_path", "")
-                        # An earlier session log in this chat, not the one being written now.
-                        if "/session-logs/" in p and p.endswith(".md") and p != path:
-                            last_log_write = i
+        last_preflight, last_log_write = scan(transcript, path)
     except Exception:
         return 0
 
@@ -76,7 +99,8 @@ def main():
         "in chat (see SLC SKILL.md -> Pre-flight):\n"
         "PRE-FLIGHT — template: read (N sections) · knowledge logs: asked/none · "
         "screenshots: extracted/owned-by-DNC · notes: N caught / N placed\n"
-        "Do any step you can't honestly fill in, then write the log again.\n"
+        "Print it with a Bash echo in its own tool call, so it is in the transcript "
+        "before the Write. Do any step you can't honestly fill in, then write the log again.\n"
     )
     return 2
 

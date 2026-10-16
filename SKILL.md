@@ -33,15 +33,17 @@ Key checkpoints:
 
 ### Pre-flight — emit this before writing any log
 
-Immediately before writing a session log, output this line so the check is visible rather than remembered:
+Immediately before writing a session log, output this line so the check is visible rather than remembered. **In Claude Code, print it with a Bash `echo` in its own tool call** (then say it in chat too if you like), and only then send the Write, in the next message:
 
 ```
 PRE-FLIGHT — template: read (N sections) · knowledge logs: asked/none · screenshots: extracted/owned-by-DNC · notes: N caught / N placed
 ```
 
+Why the echo (2026-10-15): the hook reads the chat transcript, and a line printed in the same message as the Write is not on disk yet when the hook runs; in the desktop app the visible text often lands in a thinking block. The gate blocked a log seven times in eight days that way (10-07 to 10-15), and the logs ended up written with shell heredocs, which skip the gate. A Bash echo is a finished tool call, so its entry is in the transcript before the Write's hook runs. The gate now also accepts the line in any assistant block (text, thinking, or that echo).
+
 `notes` counts the `note.` / `fleet` lines from `list_captures.py` (Workflow 4, Step 2). `0 caught / 0 placed` is a fine answer. Leaving the field out is not.
 
-**In Claude Code a hook enforces this.** `scripts/preflight_gate.py` runs before every Write. If the Write creates a new `.md` in a `session-logs/` folder and no PRE-FLIGHT line has been printed in chat since the last session log, it blocks the Write and says why. Print the line, then write again. Edits to an existing log are not checked. The hook lives in `~/.claude/settings.json`, and `resources/my-claude-preferences/setup-new-computer.command` adds it on a new Mac. Why (2026-10-03): the line was printed after the log on 08-22, 09-07 and 09-17, and words alone never fixed it. On claude.ai there is no hook, so the line still relies on this section.
+**In Claude Code a hook enforces this.** `scripts/preflight_gate.py` runs before every Write. If the Write creates a new `.md` in a `session-logs/` folder and no PRE-FLIGHT line is in the transcript since the last session log, it blocks the Write and says why. Echo the line with Bash, then write again in the next message. Edits to an existing log are not checked. The hook lives in `~/.claude/settings.json`; `scripts/add_preflight_hook.py` adds it (see INSTALL.md). Why (2026-10-03): the line was printed after the log on 08-22, 09-07 and 09-17, and words alone never fixed it. On claude.ai there is no hook, so the line still relies on this section.
 
 If any field cannot honestly be filled, **stop and go do that step.** The line is the point: a step you have to report on is a step you notice skipping, and a step you merely intend to take is one you will not.
 

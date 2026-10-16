@@ -22,7 +22,8 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 
 ## ⚠️ Pending upload to claude.ai
 
-_Nothing waiting._
+- [2026-10-15] INSTALL.md and README.md rewritten for Claude Code (they were Cursor-only, from March): clone into `~/.claude/skills/`, add the pre-flight hook, check, update with `git pull`, uninstall; Cursor and claude.ai moved to *Other places*. New `scripts/add_preflight_hook.py` adds or removes the hook in `~/.claude/settings.json` (keeps the rest, saves a `.bak`, never adds twice, stops on broken JSON). SKILL.md points at it instead of a path on Johno's Mac. Why: sharing SLC with a colleague (Joel) and the install guide didn't cover Claude Code or the hook.
+- [2026-10-15] `scripts/preflight_gate.py` accepts the PRE-FLIGHT line in any assistant block of the transcript (text, thinking, or a Bash `echo`), not only a `text` block; a Write's own content never counts. SKILL.md's Pre-flight now says: in Claude Code, echo the line with Bash in its own tool call, then Write in the next message. Why: the gate blocked a printed line seven times in eight days (10-07 to 10-15; desktop app puts visible text in thinking blocks, and a same-message line is not on disk yet), and the logs got written with heredocs that skip the gate. Closes seven IMPROVEMENTS lines. (Code only: claude.ai has no hook, so the upload only carries the SKILL.md wording.)
 
 ---
 
