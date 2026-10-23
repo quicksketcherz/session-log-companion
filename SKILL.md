@@ -9,7 +9,7 @@ Writes the **session log** at the end of a work block, and **knowledge logs** on
 
 ## Before you start
 
-- **Words:** read `resources/terms-and-phrases-<initials>.md` in the person's main vault folder (Johno: `idocs26/resources/terms-and-phrases-JB.md`); make it if missing. A word we settle goes in the same turn, under its topic.
+- **Words:** read the index `resources/terms-and-phrases-<initials>/README.md` in the person's main vault folder (Johno: `idocs26/resources/terms-and-phrases-JB/`), then only the topic file you need; make it if missing. A word we settle goes in its topic file the same turn.
 - **Replicator:** read `resources/replicator-<initials>/replicator-<initials>.md` (work: `idocs26_for_work/resources/replicator-for-work-JB/`) to find packets, templates, kits, looks and pages. "Save the pattern" adds a row; "replicate X" makes one from it.
 
 ## The rules that always hold
