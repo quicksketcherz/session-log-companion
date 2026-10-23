@@ -39,6 +39,7 @@ NOT_TYPED = (
     "<local-command",
     "Caveat:",
     "[Request interrupted",
+    "<task-notification>",
 )
 
 
@@ -51,9 +52,20 @@ def newest_jsonl():
 
 def typed_text(entry):
     """Return the text the user typed in this entry, or None."""
-    if entry.get("type") != "user" or entry.get("isMeta"):
+    if entry.get("isMeta"):
         return None
-    content = entry.get("message", {}).get("content")
+    if entry.get("type") == "user":
+        content = entry.get("message", {}).get("content")
+    elif entry.get("type") == "attachment":
+        # A message sent while the agent is working is stored as an attachment
+        # (queued_command), not a user message. Task notifications use the same
+        # type, so skip those.
+        att = entry.get("attachment", {})
+        if att.get("type") != "queued_command" or att.get("commandMode") == "task-notification":
+            return None
+        content = att.get("prompt")
+    else:
+        return None
     if isinstance(content, str):
         parts = [content]
     elif isinstance(content, list):

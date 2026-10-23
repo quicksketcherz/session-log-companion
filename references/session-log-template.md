@@ -41,15 +41,9 @@
 
 **Challenge:** [Issue addressed]  
 **Solution:** [How it was solved]  
-**see notes:** `resources/[tool]-knowledge-logs/YYYY-MM-DD-HHMM-Title.md` (when a knowledge log covers it)
+**see notes:** `<shelf>/YYYY-MM-DD-HHMM-Title.md` (when a knowledge log covers it; the central shelf, SKILL.md Workflow 2)
 
 This is where knowledge logs are linked. There is no separate Knowledge Logs table.
-
-**Note for AI:** Only create knowledge logs when user explicitly asks to document. The criteria below describe WHAT to document when asked, not when to automatically create logs:
-- **Discovery Log:** Hit impasse, AI wrong, revealed tool principle
-- **Learning Log:** Significant Q&A session, understanding concepts, filling knowledge gaps
-
-When user requests documentation, ask which tool to document for, determine log type, then create in appropriate `[tool]-knowledge-logs` folder.
 
 ---
 
@@ -111,6 +105,14 @@ decided, write "None new".
 
 ---
 
+## Patterns
+
+What was saved to the replicator this session (or offered), one line each. Leave this section out when none.
+
+- [name] — [one line] → `[path]` (row added / offered)
+
+---
+
 ## Next Steps
 
 - [ ] [Next task]
@@ -134,14 +136,13 @@ That note is the live list. -->
 
 **Read this file, not a previous log.** A finished session log is an *example*; this file is the
 *spec*. Working out the shape by opening the last log silently drops whatever sections that log
-happened to omit — which is exactly how the self-assessment and insight sections went
-missing from logs on 2026-08-22 and 2026-09-07.
+happened to omit (it went wrong on 2026-08-22 and 2026-09-07).
 
 **Keep it concise:** When knowledge logs exist, use brief summaries with "see notes:" references instead of duplicating content.
 
 **Format:**
 ```markdown
-**see notes:** `resources/[tool]-knowledge-logs/YYYY-MM-DD-HHMM-Title.md` for [what's documented there]
+**see notes:** `<shelf>/YYYY-MM-DD-HHMM-Title.md` for [what's documented there]
 ```
 
 **Cross-referencing:** Use matching timestamps between session logs and knowledge logs for instant cross-referencing.

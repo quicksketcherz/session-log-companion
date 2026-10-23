@@ -10,12 +10,6 @@ The inbox for fixing and improving this skill. Bugs and ideas land here while th
 
 ---
 
-## Tighten and modernise
-_Moved from `daily-notes/2026-09-17-1910-things-to-do-tighten-and-modernise-slc-claude-skills.md`, which has the full detail for each item._
-
-
-- [ ] [2026-10-03] `TEST-SCENARIOS.md` is out of date: it still tests preference logs, COMMANDS.md and Cursor. Rewrite it for what SLC does now, or remove it. README.md and INSTALL.md need the same check before sharing (goes with the DN + SLC packaging item) — seen in: claude-skills
-
 ## Copy-paste reference pages sub-skill
 _Moved from `daily-notes/2026-09-18-0200-things-to-do-slc-copy-paste-reference-pages-sub-skill-claude-skills.md`._
 
@@ -28,15 +22,10 @@ _Moved from `daily-notes/2026-09-18-0200-things-to-do-slc-copy-paste-reference-p
 - [ ] [2026-09-18] Does it generalise past colour (type scales, screen specs, safe areas)?
 
 ## DN and SLC together
-_Moved from `daily-notes/2026-09-26-1415-things-to-do-dn-and-slc-working-together-claude-skills.md`._
+- [ ] [2026-09-26] Package DN + SLC together for sharing: one download, a readme saying DN to start and catch ideas, SLC for the session log. Check README.md and INSTALL.md before sharing (they still describe the discovery / learning templates and project knowledge-log folders) — seen in: claude-skills
 
-- [ ] [2026-09-26] Package DN + SLC together for sharing: one download, a readme saying DN to start and catch ideas, SLC for the session log
-
-## New
+## Knowledge logs, later
+- [ ] [2026-10-18] Move old project knowledge logs to the central shelves (start with the 62 in the TD-SKETCHES26 repo). Ask Johno first; never touch `.toe` files — seen in: TD-SKETCHES26 jam
+- [ ] [2026-10-18] A `share:` label (personal / work / client) on each log before any work log is pushed, and the work repo `knowledge-logs-for-work-JB`, only when Johno says — seen in: TD-SKETCHES26 jam
 
 ## From sessions
-- [ ] [2026-10-04] `list_captures.py` misses a `note.` sent while the agent is working: it is stored as `queue-operation` / `attachment.queued_command` in the jsonl, not as a user message. Found 0 when there was 1 — seen in: TD-GRADIENTS26
-- [ ] [2026-10-06] For a TouchDesigner knowledge log, Workflow 2 Step 3 points at the project's `resources/touchdesigner-knowledge-logs/`, but the gotchas only read `idocs26_for_work/areas/how-to-maintain-improve-the-touchdesigner-scaffolding-companion-skill/resources/touchdesigner-knowledge-logs/`. The log first landed in `idocs26_for_work/resources/touchdesigner-knowledge-logs/` and had to be moved. Name the intake folder in SLC — seen in: TD-GRADIENTS26
-
-## Hand-offs to other skills
-- [ ] [2026-10-14] **End-of-session motion catch.** Before writing the session log, ask "did this session teach a feel or a motion rule?" (a timing, ease, spring, hold, idle, loop or transition Johno liked or called too fast). Each one goes to the **motion-design-companion** (MDC): a named feel into `library/feels.json`, a rule into `references/motion-design.md`. One line in the session log says what went there, like the gotchas reminder. Why: MDC only catches feels live (when Johno says "perfect" / "keep that"); the will-o-wisp feels (Thor catch, balloon float, Tinker Bell dart...) sat unfound in a knowledge log until he asked — seen in: TD-SKETCHES26 will-o-wisp
