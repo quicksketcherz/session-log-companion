@@ -29,3 +29,6 @@ _Moved from `daily-notes/2026-09-18-0200-things-to-do-slc-copy-paste-reference-p
 - [ ] [2026-10-18] A `share:` label (personal / work / client) on each log before any work log is pushed, and the work repo `knowledge-logs-for-work-JB`, only when Johno says — seen in: TD-SKETCHES26 jam
 
 ## From sessions
+- [ ] [2026-10-23] **Before the closing question, check every open to-do item against the files** (a quick "still missing" list), so a forgotten deliverable shows up before filing, not after. The Lilly floor mat was found only after the sl and dn; Johno: "how come i didnt ask u to check what else im missing" — seen in: LILLY2026
+- [2026-10-26] When the session's planned job finishes in the first half hour and five hours go somewhere else, the log must say where those hours went and why, not just list what got built. The 2026-10-25 rocky log needed a "what happened" line added by hand at the end. Suggest: Workflow 4 Step 2 gathers "what the session was for vs where the time actually went" as its own question before writing.
+- [ ] [2026-10-29] Take the log's stamp from the jsonl's first user message at session start, and have DNC name the worksession note with the same minute (2026-10-29 rocky: DNC said 2140, the jsonl 2139; the note was renamed at sl time).
