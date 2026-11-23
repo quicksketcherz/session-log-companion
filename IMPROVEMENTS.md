@@ -30,3 +30,4 @@ _Moved from `daily-notes/2026-09-18-0200-things-to-do-slc-copy-paste-reference-p
 
 ## From sessions
 - [ ] [2026-10-23] **Before the closing question, check every open to-do item against the files** (a quick "still missing" list), so a forgotten deliverable shows up before filing, not after. The Lilly floor mat was found only after the sl and dn; Johno: "how come i didnt ask u to check what else im missing" — seen in: LILLY2026
+- [ ] [2026-11-22] 🪙 **Each skill is its own git repo.** skills-JB holds only the logs and the README; at filing, commit with `git -C <skill>` for each skill touched, not skills-JB — seen in: claude-skills
