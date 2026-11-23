@@ -55,3 +55,7 @@ The expiry check, the after-filing colleague recap, the breakdown list, re-readi
 - Meetings, fleeting, ideas, references (not a worksession) → `daily-notes-companion/references/note-types.md`, words verbatim.
 - A storyboarding phase or work away from the keyboard → `filing.md` → *Time tracking*.
 - A long chat (well over 100k) → hand steps 2–3 to a fresh helper with a brief (SLC Workflow 4 → *Keep filing cheap*).
+
+## 4. Close in two lines
+
+**I'll save:** each improvement and its home with the file's size, one yes saves all. **Next time:** the next chat's first move. Nothing else (global CLAUDE.md, 2026-11-22).
