@@ -108,6 +108,17 @@ The global `CLAUDE.md` has the same rule under *Where my preferences get saved*;
 
 ## Workflow 4: Ending a session
 
+**"sl and dn" in Code: follow `references/filing-card.md` and stop there.** It replaces this workflow's steps, the template and DNC's filing guides for a worksession: one script for the facts, the session log, a 5-line daily note, push. About 3 steps. The steps below are for an sl alone, claude.ai, and the rare cases the card names. *(2026-11-22: a 10-minute kaizen's filing read about 70k of rules for two short files.)*
+
+### Keep filing cheap: a fresh helper, few steps
+
+**Every step at filing re-reads the whole chat.** On 2026-11-13 (CBIE2026) the chat was about 273k tokens by then, and the sl + dn took 21 steps: **23 % of the chat's tokens**, for files that need about 15k. Johno: "my gosh, 23%". So:
+
+1. **Few steps.** Do the reads together in one message (template, captures, image extract, times, the things-to-do note, the call sheet), then write in one or two messages. Aim for about 8 steps, never one read per step.
+2. **A fresh helper writes the files.** After the closing question, write a short brief (what we made with links, decisions in force, problems and fixes in one line each, the start stamp and active blocks, the jsonl path, every file path, the session log and daily note names, which to-do items to tick or add, the call sheet lines to change) and hand it to a subagent (`Agent`, `general-purpose`). It reads this skill and DNC's filing files, extracts the images, writes the session log, the daily note, the to-do changes and the call sheet, and reports the paths. Its steps read about 30k, not the whole chat. Then check its files and send the closing message.
+   - The brief is all it knows: a thin brief makes a thin log. Point it at the play log, which already holds the session's tries.
+   - A short chat (well under 100k) can still file here, in few steps.
+
 ### Step 0: Extract every image from the session jsonl FIRST
 
 Before anything else. Every screenshot Johno posted is pulled out, checked that it belongs to this project (an `@`-referenced note folder drags its images in too; prune them), and saved into the log's `attachments/`, which makes the log a folder. Never ask. Never skip because the image was already described. **Run the extractor again just before saving**: he often posts one more. How, and the folder shape: `references/attachments.md`.
@@ -136,6 +147,7 @@ Also gather, for the closing message:
 - **Knowledge logs** by the rules in Workflow 2 → *When to write one*.
 - **Feels:** did this session teach a feel or a motion rule (a timing, ease, spring, hold, idle, loop or transition he liked, or called too fast)? Each one goes to MDC: a named feel into `library/feels.json`, a rule into `references/motion-design.md`. MDC only catches feels live, so the will-o-wisp feels sat unfound in a knowledge log until he asked (2026-10-14).
 - **Patterns:** anything built this session that another sketch or project could use (an ops panel, a test dummy pose, a template, a page), with where it would live and which kit packets it links to. Each becomes a replicator row on his yes.
+- **Stale patterns:** run `python3 ~/.claude/skills/script-supervisor-companion/scripts/check_patterns.py --quiet`. Each pattern it flags (its **Source:** files changed after its "checked" time) gets this session's changes written in and its "checked" time bumped, listed under **I'll save** with the README's size. Nothing changed for the pattern → just bump the time. A new pattern gets a **Source:** line. Johno, 2026-11-06: "i wish its automatic".
 - **Play logs:** for each thing worked on (a construct, a packet, a sketch, a model, a comp, a cue sheet, a draft), its `play-log-<thing>.md` (in a project or sketch: its `resources/`; a construct: its own folder) has this session's tries: tried → kept / dropped → why, newest on top. Missing → make it from `references/play-log-template.md`. A line that holds beyond that one thing is offered for the skill's gotchas or `IMPROVEMENTS.md`.
 - **Improvements:** what to change in how we work, each with its home (global `CLAUDE.md`, a project `CLAUDE.md`, a skill's conventions, or a skill's `IMPROVEMENTS.md`).
 
@@ -162,7 +174,7 @@ The session log's own folder goes on a 🟢 line: "🟢 The session log goes in 
 4. **Save** to `session-logs/<name>.md`, or `session-logs/<name>/` with `attachments/` when Step 0 found screenshots.
 5. **A side session's log** links to the main session's log both ways at write time: `references/branched-log.md` → *Side sessions*.
 
-**SL and DN together** ("sl and dn"): write the session log first, run DNC to file, then come back and fill two links: `see notes:` to the daily note, and **Next Steps** as one line pointing at the things-to-do note DNC filed (`→ daily-notes/…-things-to-do-….md`). That note is the only live list. Leave out *How the Session Went*: the daily note's `**how the session went:**` has it. Without DN, Next Steps stays a list and *How the Session Went* stays.
+**SL and DN together** ("sl and dn"): write the session log first, run DNC to file, then come back and fill two links: `see notes:` to the daily note, and **Next Steps** as one line pointing at the things-to-do note DNC filed (`→ daily-notes/…-things-to-do-….md`). That note is the only live list. *How the Session Went* stays in the log (since 2026-11-22 the daily note is a 5-line index card and no longer has it). Without DN, Next Steps stays a list.
 
 **Required sections:**
 - **How the Session Went** (without DN): five short lines — set out to · what happened · why the gap · worked well · try next time (one change in how we work together, not a task). After Notes captured, before Decisions in force.
