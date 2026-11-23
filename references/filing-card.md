@@ -57,7 +57,7 @@ Add `**see next:** \`<things-to-do note>\`` only when one was made or added to. 
 
 In the same message: tick or add the things-to-do items (`✅ YYYY-MM-DD`, update `status:`, add a `see notes:` line to this worksession), rewrite the call sheet's lines, then commit and push the repos touched.
 
-**Every library touched gets pushed to both GitHubs, personal first** (2026-11-23, Johno: "personal is 1st then the work copies them so they are synced"). One folder per library on disk, the only place to edit: the consoles (`000 - MediaLab Projects/Resources/consoles-JB/`), the replicators (`idocs26/resources/replicator-JB/`, `idocs26_for_work/resources/replicator-for-work-JB/`), the knowledge logs, the skills. Commit in each, then one call pushes them all:
+**Every library touched gets pushed to both GitHubs, personal first** (2026-11-23, Johno: "personal is 1st then the work copies them so they are synced"). One folder per library on disk, the only place to edit: the consoles (`000 - MediaLab Projects/Resources/consoles-JB/`), the replicators (`idocs26/resources/replicator-JB/`, `idocs26_for_work/resources/replicator-for-work-JB/`), the knowledge logs, the skills, the word lists (`idocs26/resources/terms-and-phrases-JB/`). Commit in each, then one call pushes them all:
 `script-supervisor-companion/scripts/push_both.sh <folder> <folder> …` → one line per folder: `personal ✓ · work ✓`. A ✗ goes in the close. Never edit or commit a folder in `zz-archives/` (the old `idocs26_for_work/resources/consoles-JB` lives there now).
 
 ## Skip at filing
