@@ -108,7 +108,7 @@ The global `CLAUDE.md` has the same rule under *Where my preferences get saved*;
 
 ## Workflow 4: Ending a session
 
-**"sl and dn" in Code: follow `references/filing-card.md` and stop there.** It replaces this workflow's steps, the template and DNC's filing guides for a worksession: one script for the facts, the session log, a 5-line daily note, push. About 3 steps. The steps below are for an sl alone, claude.ai, and the rare cases the card names. *(2026-11-22: a 10-minute kaizen's filing read about 70k of rules for two short files.)*
+**"sl and dn" in Code: follow `references/filing-card.md` and stop there.** It replaces this workflow's steps, the template and DNC's filing guides for a worksession: one script for the facts, **the knowledge logs (step 1b, never skipped)**, the session log, a 5-line daily note, push. About 4 steps. The steps below are for an sl alone, claude.ai, and the rare cases the card names. *(2026-11-22: a 10-minute kaizen's filing read about 70k of rules for two short files.)*
 
 ### Keep filing cheap: a fresh helper, few steps
 
