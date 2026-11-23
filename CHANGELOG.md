@@ -76,3 +76,6 @@ History of this path, because it has moved twice: until 2026-09-06 it was a real
 - [2026-09-06] Added this CHANGELOG (there wasn't one)
 
 - 2026-11-22 — the filing card (`session-log-companion/references/filing-card.md`) and `filing_facts.py`: sl and dn in about 3 steps; a worksession daily note is 5 lines and the index of sessions; the story lives in the session log. From claude-skills (after the CD kaizen).
+
+- 2026-11-22 — ticked off from IMPROVEMENTS (already done): "how it went" asks set out to vs what happened (filing card); log stamp from the jsonl's first user message (SKILL.md Step 1, filing_facts.py); the sl rewrites the call sheet (filing card step 3); 🪙 on token-saving lines (global CLAUDE.md); a reserved log name takes the jsonl stamp (SKILL.md Step 2). Merged the three missing-log lines into one.
+- 2026-11-22 — fixed the missing-log prompt (five times since 11-03): the rule in global CLAUDE.md now says never point `start from:` at a file not on disk; write the carry note and `ls` it before `pbcopy`. Moved the browser-tab item to HCVC.
